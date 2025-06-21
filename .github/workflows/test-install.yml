@@ -32,24 +32,41 @@ jobs:
         if: matrix.container == 'debian:12'
         run: |
           apt-get update
-          apt-get install -y curl git sudo ca-certificates make gcc unzip
+          apt-get install -y curl git sudo ca-certificates build-essential unzip bash
+          # Create a non-root user for testing
+          useradd -m -s /bin/bash testuser
+          echo "testuser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/testuser
 
       - name: Test installation
         run: |
           # Install chezmoi and apply dotfiles
-          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
+          if [ -f /.dockerenv ] || [ "$container" = "debian:12" ]; then
+            # In container, run as testuser
+            su - testuser -c 'sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii'
+            export TEST_USER="testuser"
+          else
+            # On regular runners
+            sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
+            export TEST_USER="runner"
+          fi
 
       - name: Verify tools
         run: |
-          # Set PATH for tools
-          export PATH="$HOME/.local/bin:$PATH"
+          # Determine user home
+          if [ -f /.dockerenv ] || [ "$container" = "debian:12" ]; then
+            USER_HOME="/home/testuser"
+            RUN_AS="su - testuser -c"
+          else
+            USER_HOME="$HOME"
+            RUN_AS="bash -c"
+          fi
           
           # Check each tool
           echo "Checking installed tools..."
           
           for cmd in hx rg eza dust zellij ruff uv; do
-            if command -v $cmd &>/dev/null; then
-              echo "✓ $cmd: $($cmd --version 2>&1 | head -1)"
+            if $RUN_AS "PATH=$USER_HOME/.local/bin:\$PATH command -v $cmd" &>/dev/null; then
+              echo "✓ $cmd: found"
             else
               echo "✗ $cmd: not found"
               exit 1
@@ -58,15 +75,22 @@ jobs:
 
       - name: Test basic commands
         run: |
-          export PATH="$HOME/.local/bin:$PATH"
+          # Determine user home
+          if [ -f /.dockerenv ] || [ "$container" = "debian:12" ]; then
+            USER_HOME="/home/testuser"
+            RUN_AS="su - testuser -c"
+          else
+            USER_HOME="$HOME"
+            RUN_AS="bash -c"
+          fi
           
           # Test basic functionality
           echo "Testing basic commands..."
-          rg --version
-          eza --version
-          dust --version
+          $RUN_AS "PATH=$USER_HOME/.local/bin:\$PATH rg --version"
+          $RUN_AS "PATH=$USER_HOME/.local/bin:\$PATH eza --version"
+          $RUN_AS "PATH=$USER_HOME/.local/bin:\$PATH dust --version"
           
           # Verify configs exist
-          [ -f "$HOME/.bashrc" ] && echo "✓ .bashrc exists"
-          [ -f "$HOME/.gitconfig" ] && echo "✓ .gitconfig exists"
-          [ -d "$HOME/.config/helix" ] && echo "✓ Helix config exists"
+          [ -f "$USER_HOME/.bashrc" ] && echo "✓ .bashrc exists"
+          [ -f "$USER_HOME/.gitconfig" ] && echo "✓ .gitconfig exists"
+          [ -d "$USER_HOME/.config/helix" ] && echo "✓ Helix config exists"
