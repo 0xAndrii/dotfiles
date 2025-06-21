@@ -5,7 +5,7 @@ Minimal Linux development environment. Chezmoi-managed.
 ## Install
 
 ```bash
-sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply 0xAndrii
+sh -c "$(curl -fsLS chezmoi.io/get)" -- -b /tmp/bin init --apply 0xAndrii
 ```
 
 ## Tools
