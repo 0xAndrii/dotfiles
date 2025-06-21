@@ -34,21 +34,38 @@ else
 fi
 
 # Language servers (local installation)
-echo "  → Installing language servers..."
-
 # Ensure npm is in PATH
 if command -v fnm &> /dev/null; then
     export PATH="$HOME/.local/share/fnm:$PATH"
     eval "$(fnm env --use-on-cd)"
 fi
 
-# Install locally to ~/.local
-mkdir -p $HOME/.local/lib/node_modules
-NPM_CONFIG_PREFIX=$HOME/.local npm install -g --silent \
-    prettier@${PRETTIER_VERSION} \
-    pyright@${PYRIGHT_VERSION} \
-    yaml-language-server@latest >/dev/null 2>&1
-echo -e "  ${GREEN}✓${NC} Language servers installed"
+# Check and install Prettier
+if ! command -v prettier &> /dev/null || [[ $(prettier --version 2>/dev/null) != "${PRETTIER_VERSION}" ]]; then
+    echo "  → Installing Prettier v${PRETTIER_VERSION}..."
+    NPM_CONFIG_PREFIX=$HOME/.local npm install -g --silent prettier@${PRETTIER_VERSION} >/dev/null 2>&1
+    echo -e "  ${GREEN}✓${NC} Prettier installed"
+else
+    echo -e "  ${GREEN}✓${NC} Prettier already up to date"
+fi
+
+# Check and install Pyright
+if ! command -v pyright &> /dev/null || [[ $(pyright --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "${PYRIGHT_VERSION}" ]]; then
+    echo "  → Installing Pyright v${PYRIGHT_VERSION}..."
+    NPM_CONFIG_PREFIX=$HOME/.local npm install -g --silent pyright@${PYRIGHT_VERSION} >/dev/null 2>&1
+    echo -e "  ${GREEN}✓${NC} Pyright installed"
+else
+    echo -e "  ${GREEN}✓${NC} Pyright already up to date"
+fi
+
+# yaml-language-server (always latest)
+if ! command -v yaml-language-server &> /dev/null; then
+    echo "  → Installing YAML Language Server..."
+    NPM_CONFIG_PREFIX=$HOME/.local npm install -g --silent yaml-language-server@latest >/dev/null 2>&1
+    echo -e "  ${GREEN}✓${NC} YAML Language Server installed"
+else
+    echo -e "  ${GREEN}✓${NC} YAML Language Server already installed"
+fi
 
 # rust-analyzer (if Rust installed)
 if command -v cargo &> /dev/null; then

@@ -19,7 +19,14 @@ fi
 
 # Claude Code (local)
 CLAUDE_LOCAL_DIR="$HOME/.claude/local"
-if [ ! -f "$CLAUDE_LOCAL_DIR/claude" ]; then
+
+# Check if Claude is installed and get version
+if [ -f "$CLAUDE_LOCAL_DIR/claude" ]; then
+    # Get installed version from package.json
+    INSTALLED_VERSION=$(cd "$CLAUDE_LOCAL_DIR" && npm list @anthropic-ai/claude-code 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)
+fi
+
+if [ -z "$INSTALLED_VERSION" ] || [ "$INSTALLED_VERSION" != "${CLAUDE_CODE_VERSION}" ]; then
     echo "  → Installing Claude Code v${CLAUDE_CODE_VERSION}..."
     mkdir -p "$CLAUDE_LOCAL_DIR"
     cd "$CLAUDE_LOCAL_DIR"
@@ -27,6 +34,6 @@ if [ ! -f "$CLAUDE_LOCAL_DIR/claude" ]; then
     ln -sf "$CLAUDE_LOCAL_DIR/node_modules/.bin/claude" "$CLAUDE_LOCAL_DIR/claude"
     echo -e "  ${GREEN}✓${NC} Claude Code installed"
 else
-    echo -e "  ${GREEN}✓${NC} Claude Code already installed"
+    echo -e "  ${GREEN}✓${NC} Claude Code already up to date (v${INSTALLED_VERSION})"
 fi
 
