@@ -1,21 +1,33 @@
 # Tool versions
 versions:
   # Core tools
+  # https://github.com/helix-editor/helix/releases
   helix: "25.01"
+  # https://github.com/BurntSushi/ripgrep/releases
   ripgrep: "14.1.1"
+  # https://github.com/eza-community/eza/releases
   eza: "v0.21.5"
+  # https://github.com/bootandy/dust/releases
   dust: "v1.2.1"
-  zellij: "0.41.2"
+  # https://github.com/zellij-org/zellij/releases
+  zellij: "0.42.2"
+  # https://github.com/tamasfe/taplo/releases
   taplo: "0.10.0"
   
   # Python tools
+  # https://github.com/astral-sh/ruff/releases
   ruff: "0.12.0"
+  # https://github.com/astral-sh/uv/releases
   uv: "0.7.13"
   
   # Language servers
+  # https://nodejs.org/en/about/releases/
   node: "22"
+  # https://github.com/microsoft/pyright/releases
   pyright: "1.1.402"
+  # https://github.com/prettier/prettier/releases
   prettier: "3.5.3"
   
   # AI
+  # https://www.npmjs.com/package/@anthropic-ai/claude-code
   claude_code: "1.0.31"
