@@ -23,7 +23,7 @@ echo "[2/5] Installing development tools..."
 mkdir -p $HOME/.local/bin
 
 # Helix
-if ! command -v hx &> /dev/null || [[ $(hx --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -1) != "25.1" ]]; then
+if ! command -v hx &> /dev/null || [[ $(hx --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "${HELIX_VERSION}" ]]; then
     echo "  → Installing Helix v${HELIX_VERSION}..."
     cd /tmp
     curl -sL -o helix.tar.xz "https://github.com/helix-editor/helix/releases/download/${HELIX_VERSION}/helix-${HELIX_VERSION}-${ARCH}-linux.tar.xz"

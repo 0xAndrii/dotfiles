@@ -36,6 +36,7 @@ jobs:
           current_versions[uv]=$(yq '.versions.uv' .chezmoidata.yaml)
           current_versions[pyright]=$(yq '.versions.pyright' .chezmoidata.yaml)
           current_versions[prettier]=$(yq '.versions.prettier' .chezmoidata.yaml)
+          current_versions[claude_code]=$(yq '.versions.claude_code' .chezmoidata.yaml)
           
           # GitHub repos for each tool
           declare -A repos
@@ -54,6 +55,7 @@ jobs:
           updates_found=false
           updates_summary=""
           
+          # Check GitHub releases
           for tool in "${!repos[@]}"; do
             repo="${repos[$tool]}"
             current="${current_versions[$tool]}"
@@ -66,6 +68,29 @@ jobs:
             latest_normalized="${latest#v}"
             
             if [[ -n "$latest" && "$current_normalized" != "$latest_normalized" ]]; then
+              echo "Update found for $tool: $current -> $latest"
+              updates_found=true
+              updates_summary+="- $tool: $current → $latest\n"
+              
+              # Update the yaml file
+              yq -i ".versions.$tool = \"$latest\"" .chezmoidata.yaml
+            fi
+          done
+          
+          # Check npm packages
+          declare -A npm_packages
+          npm_packages[claude_code]="@anthropic-ai/claude-code"
+          npm_packages[prettier]="prettier"
+          npm_packages[pyright]="pyright"
+          
+          for tool in "${!npm_packages[@]}"; do
+            package="${npm_packages[$tool]}"
+            current="${current_versions[$tool]}"
+            
+            # Get latest version from npm
+            latest=$(curl -s "https://registry.npmjs.org/$package/latest" | jq -r '.version' || echo "")
+            
+            if [[ -n "$latest" && "$current" != "$latest" ]]; then
               echo "Update found for $tool: $current -> $latest"
               updates_found=true
               updates_summary+="- $tool: $current → $latest\n"
