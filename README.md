@@ -50,7 +50,7 @@ chezmoi apply
 
 ## Versions
 
-Edit `.chezmoiscripts/run_once_00-install-packages.sh.tmpl`, then `chezmoi apply`.
+Edit version numbers in `.chezmoiscripts/`, then `chezmoi apply`.
 
 ---
 

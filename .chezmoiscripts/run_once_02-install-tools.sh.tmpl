@@ -1,0 +1,100 @@
+#!/bin/bash
+set -e
+
+# Core development tools
+
+ARCH=$(uname -m)
+
+# Versions
+HELIX_VERSION="25.01"
+EZA_VERSION="v0.21.5"
+DUST_VERSION="v1.2.1"
+ZELLIJ_VERSION="0.41.2"
+TAPLO_VERSION="0.10.0"
+
+echo "[2/4] Installing development tools..."
+
+# Helix
+if ! command -v hx &> /dev/null || [[ $(hx --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -1) != "25.1" ]]; then
+    echo "Installing Helix..."
+    cd /tmp
+    curl -sL -o helix.tar.xz "https://github.com/helix-editor/helix/releases/download/${HELIX_VERSION}/helix-${HELIX_VERSION}-${ARCH}-linux.tar.xz"
+    tar xf helix.tar.xz
+    sudo mv "helix-${HELIX_VERSION}-${ARCH}-linux/hx" /usr/local/bin/
+    sudo chmod +x /usr/local/bin/hx
+    sudo mkdir -p /usr/local/share/helix
+    sudo cp -r "helix-${HELIX_VERSION}-${ARCH}-linux/runtime" /usr/local/share/helix/
+    rm -rf helix.tar.xz "helix-${HELIX_VERSION}-${ARCH}-linux"
+fi
+
+# Ripgrep
+if ! command -v rg &> /dev/null; then
+    echo "Installing Ripgrep..."
+    source /etc/os-release
+    if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
+        sudo apt install -y ripgrep
+    elif [[ "$ID" == "fedora" ]]; then
+        sudo dnf install -y ripgrep
+    elif [[ "$ID" == "arch" ]]; then
+        sudo pacman -S --noconfirm ripgrep
+    fi
+fi
+
+# Eza
+if ! command -v eza &> /dev/null || [[ $(eza --version 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$EZA_VERSION" ]]; then
+    echo "Installing Eza..."
+    cd /tmp
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -sL -o eza.zip "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_x86_64-unknown-linux-gnu.zip"
+    else
+        curl -sL -o eza.zip "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_aarch64-unknown-linux-gnu.zip"
+    fi
+    unzip -o eza.zip
+    sudo mv eza /usr/local/bin/
+    sudo chmod +x /usr/local/bin/eza
+    rm eza.zip
+fi
+
+# Dust
+if ! command -v dust &> /dev/null || [[ $(dust --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "${DUST_VERSION#v}" ]]; then
+    echo "Installing Dust..."
+    cd /tmp
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -sL -o dust.tar.gz "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+    else
+        curl -sL -o dust.tar.gz "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-aarch64-unknown-linux-gnu.tar.gz"
+    fi
+    tar xzf dust.tar.gz
+    sudo mv dust-*/dust /usr/local/bin/
+    sudo chmod +x /usr/local/bin/dust
+    rm -rf dust.tar.gz dust-*/
+fi
+
+# Zellij
+if ! command -v zellij &> /dev/null || [[ $(zellij --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$ZELLIJ_VERSION" ]]; then
+    echo "Installing Zellij..."
+    cd /tmp
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -sL -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz"
+    else
+        curl -sL -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-aarch64-unknown-linux-musl.tar.gz"
+    fi
+    tar xzf zellij.tar.gz
+    sudo mv zellij /usr/local/bin/
+    sudo chmod +x /usr/local/bin/zellij
+    rm zellij.tar.gz
+fi
+
+# Taplo
+if ! command -v taplo &> /dev/null; then
+    echo "Installing Taplo..."
+    cd /tmp
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -sL -o taplo.gz "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-x86_64.gz"
+    else
+        curl -sL -o taplo.gz "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-aarch64.gz"
+    fi
+    gunzip taplo.gz
+    sudo mv taplo /usr/local/bin/
+    sudo chmod +x /usr/local/bin/taplo
+fi

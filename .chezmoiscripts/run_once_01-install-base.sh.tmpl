@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+# Base system packages
+
+source /etc/os-release
+
+echo "[1/4] Installing base packages..."
+
+if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
+    sudo apt update
+    sudo apt install -y curl git build-essential unzip
+elif [[ "$ID" == "fedora" ]]; then
+    sudo dnf install -y curl git gcc make unzip
+elif [[ "$ID" == "arch" ]]; then
+    sudo pacman -Sy --noconfirm curl git base-devel unzip
+else
+    echo "Unsupported distribution: $ID" >&2
+    exit 1
+fi

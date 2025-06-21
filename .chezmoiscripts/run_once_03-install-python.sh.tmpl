@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+# Python development tools
+
+RUFF_VERSION="0.12.0"
+UV_VERSION="0.7.13"
+
+echo "[3/4] Installing Python tools..."
+
+# Ruff
+if ! command -v ruff &> /dev/null || [[ $(ruff --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$RUFF_VERSION" ]]; then
+    echo "Installing Ruff..."
+    curl -LsSf "https://astral.sh/ruff/${RUFF_VERSION}/install.sh" | sh
+fi
+
+# uv
+if ! command -v uv &> /dev/null || [[ $(uv --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$UV_VERSION" ]]; then
+    echo "Installing uv..."
+    curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh
+fi
