@@ -7,11 +7,11 @@ source /etc/os-release
 ARCH=$(uname -m)
 
 # Versions
-HELIX_VERSION="25.01"
-EZA_VERSION="v0.21.5"
-DUST_VERSION="v1.2.1"
-ZELLIJ_VERSION="0.41.2"
-TAPLO_VERSION="0.10.0"
+HELIX_VERSION="{{ .versions.helix }}"
+EZA_VERSION="{{ .versions.eza }}"
+DUST_VERSION="{{ .versions.dust }}"
+ZELLIJ_VERSION="{{ .versions.zellij }}"
+TAPLO_VERSION="{{ .versions.taplo }}"
 
 # Colors
 GREEN='\033[0;32m'

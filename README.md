@@ -51,7 +51,7 @@ chezmoi apply
 
 ## Versions
 
-Edit version numbers in `.chezmoiscripts/`, then `chezmoi apply`.
+Edit `.chezmoidata.yaml`, then `chezmoi apply`.
 
 ---
 

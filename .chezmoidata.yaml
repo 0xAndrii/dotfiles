@@ -1,0 +1,20 @@
+# Tool versions
+versions:
+  # Core tools
+  helix: "25.01"
+  eza: "v0.21.5"
+  dust: "v1.2.1"
+  zellij: "0.41.2"
+  taplo: "0.10.0"
+  
+  # Python tools
+  ruff: "0.12.0"
+  uv: "0.7.13"
+  
+  # Language servers
+  node: "22"
+  pyright: "1.1.402"
+  prettier: "3.5.3"
+  
+  # AI
+  claude_code: "1.0.31"

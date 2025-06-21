@@ -3,6 +3,7 @@ README.md
 LICENSE
 .git
 .gitignore
+.chezmoidata.yaml
 
 # OS files
 .DS_Store
