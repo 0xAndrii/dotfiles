@@ -16,8 +16,8 @@ echo "[4/5] Installing language servers..."
 # Node.js
 if ! command -v node &> /dev/null; then
     echo "  → Installing Node.js v${NODE_VERSION}..."
-    curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
-    sudo apt-get install -y nodejs
+    curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash - >/dev/null 2>&1
+    sudo apt-get install -yqq nodejs >/dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} Node.js installed"
 else
     echo -e "  ${GREEN}✓${NC} Node.js already installed"
@@ -25,10 +25,10 @@ fi
 
 # Language servers
 echo "  → Installing language servers..."
-sudo npm install -g -s \
+sudo npm install -g --silent \
     prettier@${PRETTIER_VERSION} \
     pyright@${PYRIGHT_VERSION} \
-    yaml-language-server@latest
+    yaml-language-server@latest >/dev/null 2>&1
 echo -e "  ${GREEN}✓${NC} Language servers installed"
 
 # rust-analyzer (if Rust installed)
@@ -42,7 +42,7 @@ if command -v cargo &> /dev/null; then
         else
             curl -sL -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-unknown-linux-gnu.gz"
         fi
-        gunzip rust-analyzer.gz
+        gunzip -q rust-analyzer.gz
         sudo mv rust-analyzer /usr/local/bin/
         sudo chmod +x /usr/local/bin/rust-analyzer
         echo -e "  ${GREEN}✓${NC} rust-analyzer installed"
@@ -50,6 +50,4 @@ if command -v cargo &> /dev/null; then
         echo -e "  ${GREEN}✓${NC} rust-analyzer already installed"
     fi
 fi
-
-echo -e "${GREEN}Done! All tools installed successfully.${NC}"
 

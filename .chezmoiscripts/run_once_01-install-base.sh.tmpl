@@ -13,17 +13,17 @@ echo "[1/5] Installing base packages..."
 
 if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
     echo "  → Updating package list..."
-    sudo apt update
+    sudo apt update -qq >/dev/null 2>&1
     echo "  → Installing packages..."
-    sudo apt install -y curl git build-essential unzip
+    sudo DEBIAN_FRONTEND=noninteractive apt install -yqq curl git build-essential unzip >/dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} Base packages installed"
 elif [[ "$ID" == "fedora" ]]; then
     echo "  → Installing packages..."
-    sudo dnf install -y curl git gcc make unzip
+    sudo dnf install -yq curl git gcc make unzip >/dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} Base packages installed"
 elif [[ "$ID" == "arch" ]]; then
     echo "  → Installing packages..."
-    sudo pacman -Sy --noconfirm curl git base-devel unzip
+    sudo pacman -Sy --noconfirm --quiet curl git base-devel unzip >/dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} Base packages installed"
 else
     echo "Unsupported distribution: $ID" >&2

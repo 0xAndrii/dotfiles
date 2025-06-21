@@ -39,11 +39,11 @@ fi
 if ! command -v rg &> /dev/null; then
     echo "  → Installing Ripgrep..."
     if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
-        sudo apt install -y ripgrep
+        sudo apt install -yqq ripgrep >/dev/null 2>&1
     elif [[ "$ID" == "fedora" ]]; then
-        sudo dnf install -y ripgrep
+        sudo dnf install -yq ripgrep >/dev/null 2>&1
     elif [[ "$ID" == "arch" ]]; then
-        sudo pacman -S --noconfirm ripgrep
+        sudo pacman -S --noconfirm --quiet ripgrep >/dev/null 2>&1
     fi
     echo -e "  ${GREEN}✓${NC} Ripgrep installed"
 else
@@ -59,7 +59,7 @@ if ! command -v eza &> /dev/null || [[ $(eza --version 2>/dev/null | grep -oE 'v
     else
         curl -sL -o eza.zip "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_aarch64-unknown-linux-gnu.zip"
     fi
-    unzip -o eza.zip
+    unzip -oq eza.zip >/dev/null
     sudo mv eza /usr/local/bin/
     sudo chmod +x /usr/local/bin/eza
     rm eza.zip

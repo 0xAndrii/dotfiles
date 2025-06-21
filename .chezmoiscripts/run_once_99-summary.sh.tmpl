@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+# Final summary
+
+# Colors
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+echo
+echo -e "${BLUE}════════════════════════════════════════${NC}"
+echo -e "${GREEN}✓ Setup complete${NC}"
+echo -e "${BLUE}════════════════════════════════════════${NC}"
+echo
+echo "Tools installed:"
+echo "  • helix (hx)      - Text editor"
+echo "  • zellij (zj)     - Terminal multiplexer"  
+echo "  • ripgrep (rg)    - Fast search"
+echo "  • eza             - Better ls"
+echo "  • dust            - Disk usage"
+echo "  • ruff            - Python linting"
+echo "  • uv              - Python packages"
+echo "  • claude          - AI assistant"
+echo
+echo -e "${YELLOW}Quick start:${NC}"
+echo "  source ~/.bashrc  - Reload shell config"
+echo "  hx ~/.bashrc      - Edit your shell config"
+echo "  zj                - Start terminal session"
+echo "  claude --help     - AI assistance"
+echo
+echo -e "${BLUE}════════════════════════════════════════${NC}"

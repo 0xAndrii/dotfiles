@@ -15,7 +15,7 @@ echo "[3/5] Installing Python tools..."
 # Ruff
 if ! command -v ruff &> /dev/null || [[ $(ruff --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$RUFF_VERSION" ]]; then
     echo "  → Installing Ruff v${RUFF_VERSION}..."
-    curl -LsSf "https://astral.sh/ruff/${RUFF_VERSION}/install.sh" | sh
+    curl -LsSf "https://astral.sh/ruff/${RUFF_VERSION}/install.sh" | sh -s -- --quiet >/dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} Ruff installed"
 else
     echo -e "  ${GREEN}✓${NC} Ruff already up to date"
@@ -24,7 +24,7 @@ fi
 # uv
 if ! command -v uv &> /dev/null || [[ $(uv --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$UV_VERSION" ]]; then
     echo "  → Installing uv v${UV_VERSION}..."
-    curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh
+    curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh -s -- --quiet >/dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} uv installed"
 else
     echo -e "  ${GREEN}✓${NC} uv already up to date"

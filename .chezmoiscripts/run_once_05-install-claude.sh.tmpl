@@ -23,7 +23,7 @@ if [ ! -f "$CLAUDE_LOCAL_DIR/claude" ]; then
     echo "  → Installing Claude Code v${CLAUDE_CODE_VERSION}..."
     mkdir -p "$CLAUDE_LOCAL_DIR"
     cd "$CLAUDE_LOCAL_DIR"
-    npm install -s @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+    npm install --silent @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} >/dev/null 2>&1
     ln -sf "$CLAUDE_LOCAL_DIR/node_modules/.bin/claude" "$CLAUDE_LOCAL_DIR/claude"
     echo -e "  ${GREEN}✓${NC} Claude Code installed"
 else
