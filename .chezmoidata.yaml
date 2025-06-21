@@ -9,42 +9,42 @@ tools:
     repo: helix-editor/helix
     version: "25.01.1"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   ripgrep:
     description: "Fast code search"
     type: github
     repo: BurntSushi/ripgrep
     version: "14.1.1"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   eza:
     description: "Modern ls replacement"
     type: github
     repo: eza-community/eza
     version: "v0.21.5"
     pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   dust:
     description: "Disk usage analyzer"
     type: github
     repo: bootandy/dust
     version: "v1.2.1"
     pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   zellij:
     description: "Terminal multiplexer"
     type: github
     repo: zellij-org/zellij
     version: "v0.42.2"
     pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   taplo:
     description: "TOML toolkit"
     type: github
     repo: tamasfe/taplo
     version: "0.10.0"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   # Python tools
   ruff:
     description: "Python linter and formatter"
@@ -52,14 +52,14 @@ tools:
     repo: astral-sh/ruff
     version: "0.12.0"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   uv:
     description: "Python package manager"
     type: github
     repo: astral-sh/uv
     version: "0.7.13"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   # Language servers
   pyright:
     description: "Python language server"
@@ -67,21 +67,21 @@ tools:
     package: pyright
     version: "1.1.402"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   prettier:
     description: "Code formatter"
     type: npm
     package: prettier
     version: "3.5.3"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   yaml_language_server:
     description: "YAML language server"
     type: npm
     package: yaml-language-server
     version: "1.15.0"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    
+
   # AI tools
   claude_code:
     description: "AI coding assistant"
