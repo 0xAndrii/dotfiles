@@ -59,11 +59,7 @@ secrets/
 !dot_bashrc.local
 
 # Claude Code
-.claude/local/node_modules/
-.claude/local/package-lock.json
-.claude/local/package.json
-.claude/cache/
-.claude/logs/
+.claude/
 
 # Misc
 .cache/
