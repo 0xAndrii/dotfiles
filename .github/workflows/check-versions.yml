@@ -92,9 +92,6 @@ jobs:
                 package=$(yq ".tools.${tool}.package" .chezmoidata.yaml)
                 latest=$(check_npm_package "$package" || echo "error")
                 ;;
-              manual)
-                latest="manual"
-                ;;
               *)
                 latest="error"
                 ;;
@@ -104,12 +101,6 @@ jobs:
             if [ "$latest" = "error" ]; then
               status="❌ Check failed"
               check_failures=$((check_failures + 1))
-            elif [ "$latest" = "manual" ]; then
-              note=$(yq ".tools.${tool}.note" .chezmoidata.yaml)
-              status="📋 Manual check"
-              if [ "$note" != "null" ]; then
-                status="$status - $note"
-              fi
             elif [ "$(normalize_version "$current")" = "$(normalize_version "$latest")" ]; then
               status="✅ Up to date"
             else
