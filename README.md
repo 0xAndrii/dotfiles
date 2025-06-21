@@ -2,7 +2,7 @@
 
 [![Linux](https://img.shields.io/badge/platform-linux-blue?logo=linux&logoColor=white)](https://github.com/0xAndrii/dotfiles)
 [![Managed by Chezmoi](https://img.shields.io/badge/managed%20by-chezmoi-blueviolet)](https://www.chezmoi.io)
-[![Installation Test](https://github.com/0xAndrii/dotfiles/actions/workflows/test-install.yml/badge.svg)](https://github.com/0xAndrii/dotfiles/actions/workflows/test-install.yml)
+[![Check Versions](https://github.com/0xAndrii/dotfiles/actions/workflows/check-versions.yml/badge.svg)](https://github.com/0xAndrii/dotfiles/actions/workflows/check-versions.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Minimal Linux development environment. Chezmoi-managed.
