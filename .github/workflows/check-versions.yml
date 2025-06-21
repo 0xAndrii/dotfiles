@@ -69,6 +69,7 @@ jobs:
           # Initialize
           updates=()
           has_updates=false
+          check_failures=0
           
           # Check each tool
           echo "## Checking tool versions" >> $GITHUB_STEP_SUMMARY
@@ -91,6 +92,9 @@ jobs:
                 package=$(yq ".tools.${tool}.package" .chezmoidata.yaml)
                 latest=$(check_npm_package "$package" || echo "error")
                 ;;
+              manual)
+                latest="manual"
+                ;;
               *)
                 latest="error"
                 ;;
@@ -99,6 +103,13 @@ jobs:
             # Compare versions
             if [ "$latest" = "error" ]; then
               status="❌ Check failed"
+              check_failures=$((check_failures + 1))
+            elif [ "$latest" = "manual" ]; then
+              note=$(yq ".tools.${tool}.note" .chezmoidata.yaml)
+              status="📋 Manual check"
+              if [ "$note" != "null" ]; then
+                status="$status - $note"
+              fi
             elif [ "$(normalize_version "$current")" = "$(normalize_version "$latest")" ]; then
               status="✅ Up to date"
             else
@@ -118,4 +129,11 @@ jobs:
             # Escape for GitHub Actions
             updates_escaped=$(echo "$updates_json" | jq -c '.')
             echo "updates=$updates_escaped" >> $GITHUB_OUTPUT
+          fi
+          
+          # Fail if there were check failures
+          if [ $check_failures -gt 0 ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **$check_failures check(s) failed**" >> $GITHUB_STEP_SUMMARY
+            exit 1
           fi

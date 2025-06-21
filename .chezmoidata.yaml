@@ -63,9 +63,10 @@ tools:
   # Language servers
   node:
     description: "JavaScript runtime"
-    type: nodejs
+    type: manual
     version: "22"
     pattern: "^[0-9]+$"
+    note: "Check https://nodejs.org/en/about/releases/ for LTS versions"
     
   pyright:
     description: "Python language server"
