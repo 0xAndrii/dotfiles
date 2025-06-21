@@ -5,13 +5,23 @@ Minimal Linux development environment. Chezmoi-managed.
 ## Install
 
 ```bash
-sh -c "$(curl -fsLS chezmoi.io/get)" -- -b /tmp/bin init --apply 0xAndrii
+sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply 0xAndrii
 ```
 
-### Fresh install (clear cache)
+### Fresh install
 
 ```bash
-sh -c "$(curl -fsLS chezmoi.io/get)" -- -b /tmp/bin init --apply --force --refresh-externals --purge 0xAndrii
+TMPDIR=$(mktemp -d) && \
+sh -c "$(curl -fsLS chezmoi.io/get)" -- \
+  -b "$TMPDIR/bin" \
+  init \
+  --apply \
+  --force \
+  --refresh-externals \
+  --purge \
+  --cache-dir "$TMPDIR/cache" \
+  0xAndrii && \
+rm -rf "$TMPDIR"
 ```
 
 ## Tools
