@@ -1,28 +1,22 @@
 {
-  "enabledTools": [
-    "Bash",
-    "Read",
-    "Write",
-    "Edit",
-    "MultiEdit",
-    "Glob",
-    "Grep",
-    "LS",
-    "WebSearch",
-    "WebFetch",
-    "Task",
-    "exit_plan_mode",
-    "TodoRead",
-    "TodoWrite",
-    "NotebookRead",
-    "NotebookEdit"
-  ],
-  "customInstructions": "",
-  "alwaysAllowBash": false,
-  "alwaysAllowReads": false,
-  "alwaysAllowWrites": false,
-  "alwaysAllowEdits": false,
-  "alwaysAllowGlob": false,
-  "autoApprove": false,
-  "autoRunBash": false
+  "permissions": {
+    "allow": [
+      "git worktree",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(docker logs:*)",
+      "Bash(rg:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(ls:*)",
+      "Bash(ruff check:*)",
+      "Bash(ruff format:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh pr view:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(gh pr list:*)"
+    ]
+  },
+  "model": "opus"
 }
