@@ -19,16 +19,19 @@ NC='\033[0m'
 
 echo "[2/5] Installing development tools..."
 
+# Ensure ~/.local/bin exists
+mkdir -p $HOME/.local/bin
+
 # Helix
 if ! command -v hx &> /dev/null || [[ $(hx --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+' | head -1) != "25.1" ]]; then
     echo "  → Installing Helix v${HELIX_VERSION}..."
     cd /tmp
     curl -sL -o helix.tar.xz "https://github.com/helix-editor/helix/releases/download/${HELIX_VERSION}/helix-${HELIX_VERSION}-${ARCH}-linux.tar.xz"
     tar xf helix.tar.xz
-    sudo mv "helix-${HELIX_VERSION}-${ARCH}-linux/hx" /usr/local/bin/
-    sudo chmod +x /usr/local/bin/hx
-    sudo mkdir -p /usr/local/share/helix
-    sudo cp -r "helix-${HELIX_VERSION}-${ARCH}-linux/runtime" /usr/local/share/helix/
+    mv "helix-${HELIX_VERSION}-${ARCH}-linux/hx" $HOME/.local/bin/
+    chmod +x $HOME/.local/bin/hx
+    mkdir -p $HOME/.local/share/helix
+    cp -r "helix-${HELIX_VERSION}-${ARCH}-linux/runtime" $HOME/.local/share/helix/
     rm -rf helix.tar.xz "helix-${HELIX_VERSION}-${ARCH}-linux"
     echo -e "  ${GREEN}✓${NC} Helix installed"
 else
@@ -38,13 +41,17 @@ fi
 # Ripgrep
 if ! command -v rg &> /dev/null; then
     echo "  → Installing Ripgrep..."
-    if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
-        sudo apt install -yqq ripgrep >/dev/null 2>&1
-    elif [[ "$ID" == "fedora" ]]; then
-        sudo dnf install -yq ripgrep >/dev/null 2>&1
-    elif [[ "$ID" == "arch" ]]; then
-        sudo pacman -S --noconfirm --quiet ripgrep >/dev/null 2>&1
+    cd /tmp
+    RIPGREP_VERSION="{{ .versions.ripgrep }}"
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -sL -o ripgrep.tar.gz "https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREP_VERSION}/ripgrep-${RIPGREP_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+    else
+        curl -sL -o ripgrep.tar.gz "https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREP_VERSION}/ripgrep-${RIPGREP_VERSION}-aarch64-unknown-linux-gnu.tar.gz"
     fi
+    tar xzf ripgrep.tar.gz
+    mv ripgrep-*/rg $HOME/.local/bin/
+    chmod +x $HOME/.local/bin/rg
+    rm -rf ripgrep.tar.gz ripgrep-*/
     echo -e "  ${GREEN}✓${NC} Ripgrep installed"
 else
     echo -e "  ${GREEN}✓${NC} Ripgrep already installed"
@@ -60,8 +67,8 @@ if ! command -v eza &> /dev/null || [[ $(eza --version 2>/dev/null | grep -oE 'v
         curl -sL -o eza.zip "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_aarch64-unknown-linux-gnu.zip"
     fi
     unzip -oq eza.zip >/dev/null
-    sudo mv eza /usr/local/bin/
-    sudo chmod +x /usr/local/bin/eza
+    mv eza $HOME/.local/bin/
+    chmod +x $HOME/.local/bin/eza
     rm eza.zip
     echo -e "  ${GREEN}✓${NC} Eza installed"
 else
@@ -78,8 +85,8 @@ if ! command -v dust &> /dev/null || [[ $(dust --version 2>/dev/null | grep -oE 
         curl -sL -o dust.tar.gz "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-aarch64-unknown-linux-gnu.tar.gz"
     fi
     tar xzf dust.tar.gz
-    sudo mv dust-*/dust /usr/local/bin/
-    sudo chmod +x /usr/local/bin/dust
+    mv dust-*/dust $HOME/.local/bin/
+    chmod +x $HOME/.local/bin/dust
     rm -rf dust.tar.gz dust-*/
     echo -e "  ${GREEN}✓${NC} Dust installed"
 else
@@ -96,8 +103,8 @@ if ! command -v zellij &> /dev/null || [[ $(zellij --version 2>/dev/null | grep 
         curl -sL -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-aarch64-unknown-linux-musl.tar.gz"
     fi
     tar xzf zellij.tar.gz
-    sudo mv zellij /usr/local/bin/
-    sudo chmod +x /usr/local/bin/zellij
+    mv zellij $HOME/.local/bin/
+    chmod +x $HOME/.local/bin/zellij
     rm zellij.tar.gz
     echo -e "  ${GREEN}✓${NC} Zellij installed"
 else
@@ -114,8 +121,8 @@ if ! command -v taplo &> /dev/null; then
         curl -sL -o taplo.gz "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-aarch64.gz"
     fi
     gunzip taplo.gz
-    sudo mv taplo /usr/local/bin/
-    sudo chmod +x /usr/local/bin/taplo
+    mv taplo $HOME/.local/bin/
+    chmod +x $HOME/.local/bin/taplo
     echo -e "  ${GREEN}✓${NC} Taplo installed"
 else
     echo -e "  ${GREEN}✓${NC} Taplo already installed"

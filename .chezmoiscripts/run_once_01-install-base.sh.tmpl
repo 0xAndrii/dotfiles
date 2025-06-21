@@ -11,21 +11,43 @@ NC='\033[0m'
 
 echo "[1/5] Installing base packages..."
 
-if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
-    echo "  → Updating package list..."
-    sudo apt update -qq >/dev/null 2>&1
-    echo "  → Installing packages..."
-    sudo DEBIAN_FRONTEND=noninteractive apt install -yqq curl git build-essential unzip >/dev/null 2>&1
-    echo -e "  ${GREEN}✓${NC} Base packages installed"
-elif [[ "$ID" == "fedora" ]]; then
-    echo "  → Installing packages..."
-    sudo dnf install -yq curl git gcc make unzip >/dev/null 2>&1
-    echo -e "  ${GREEN}✓${NC} Base packages installed"
-elif [[ "$ID" == "arch" ]]; then
-    echo "  → Installing packages..."
-    sudo pacman -Sy --noconfirm --quiet curl git base-devel unzip >/dev/null 2>&1
+# Check which packages are missing
+MISSING_PACKAGES=""
+for pkg in curl git make gcc unzip; do
+    if ! command -v $pkg &> /dev/null; then
+        MISSING_PACKAGES="$MISSING_PACKAGES $pkg"
+    fi
+done
+
+# Trim whitespace
+MISSING_PACKAGES=$(echo $MISSING_PACKAGES | xargs)
+
+if [ -n "$MISSING_PACKAGES" ]; then
+    echo "  → Installing missing packages..."
+    
+    if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
+        # Replace make/gcc with build-essential for debian-based
+        if [[ "$MISSING_PACKAGES" == *"make"* ]] || [[ "$MISSING_PACKAGES" == *"gcc"* ]]; then
+            MISSING_PACKAGES="$MISSING_PACKAGES build-essential"
+            MISSING_PACKAGES=$(echo $MISSING_PACKAGES | sed 's/make//g' | sed 's/gcc//g' | xargs)
+        fi
+        sudo apt update -qq >/dev/null 2>&1
+        sudo DEBIAN_FRONTEND=noninteractive apt install -yqq $MISSING_PACKAGES >/dev/null 2>&1
+    elif [[ "$ID" == "fedora" ]]; then
+        sudo dnf install -yq $MISSING_PACKAGES >/dev/null 2>&1
+    elif [[ "$ID" == "arch" ]]; then
+        # Replace make/gcc with base-devel for arch
+        if [[ "$MISSING_PACKAGES" == *"make"* ]] || [[ "$MISSING_PACKAGES" == *"gcc"* ]]; then
+            MISSING_PACKAGES="$MISSING_PACKAGES base-devel"
+            MISSING_PACKAGES=$(echo $MISSING_PACKAGES | sed 's/make//g' | sed 's/gcc//g' | xargs)
+        fi
+        sudo pacman -Sy --noconfirm --quiet $MISSING_PACKAGES >/dev/null 2>&1
+    else
+        echo "Unsupported distribution: $ID" >&2
+        echo "Please install manually: $MISSING_PACKAGES"
+        exit 1
+    fi
     echo -e "  ${GREEN}✓${NC} Base packages installed"
 else
-    echo "Unsupported distribution: $ID" >&2
-    exit 1
+    echo -e "  ${GREEN}✓${NC} All base packages already installed"
 fi

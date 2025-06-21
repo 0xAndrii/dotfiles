@@ -13,19 +13,38 @@ NC='\033[0m'
 
 echo "[4/5] Installing language servers..."
 
-# Node.js
-if ! command -v node &> /dev/null; then
-    echo "  → Installing Node.js v${NODE_VERSION}..."
-    curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash - >/dev/null 2>&1
-    sudo apt-get install -yqq nodejs >/dev/null 2>&1
-    echo -e "  ${GREEN}✓${NC} Node.js installed"
+# Node.js and npm (local installation)
+if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
+    echo "  → Installing Node.js v${NODE_VERSION} locally..."
+    
+    # Install fnm (Fast Node Manager)
+    if ! command -v fnm &> /dev/null; then
+        curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell >/dev/null 2>&1
+    fi
+    
+    # Source fnm and install Node
+    export PATH="$HOME/.local/share/fnm:$PATH"
+    eval "$(fnm env --use-on-cd)"
+    fnm install ${NODE_VERSION} >/dev/null 2>&1
+    fnm use ${NODE_VERSION} >/dev/null 2>&1
+    
+    echo -e "  ${GREEN}✓${NC} Node.js installed locally"
 else
-    echo -e "  ${GREEN}✓${NC} Node.js already installed"
+    echo -e "  ${GREEN}✓${NC} Node.js and npm already available"
 fi
 
-# Language servers
+# Language servers (local installation)
 echo "  → Installing language servers..."
-sudo npm install -g --silent \
+
+# Ensure npm is in PATH
+if command -v fnm &> /dev/null; then
+    export PATH="$HOME/.local/share/fnm:$PATH"
+    eval "$(fnm env --use-on-cd)"
+fi
+
+# Install locally to ~/.local
+mkdir -p $HOME/.local/lib/node_modules
+NPM_CONFIG_PREFIX=$HOME/.local npm install -g --silent \
     prettier@${PRETTIER_VERSION} \
     pyright@${PYRIGHT_VERSION} \
     yaml-language-server@latest >/dev/null 2>&1
@@ -43,8 +62,8 @@ if command -v cargo &> /dev/null; then
             curl -sL -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-unknown-linux-gnu.gz"
         fi
         gunzip -q rust-analyzer.gz
-        sudo mv rust-analyzer /usr/local/bin/
-        sudo chmod +x /usr/local/bin/rust-analyzer
+        mv rust-analyzer $HOME/.local/bin/
+        chmod +x $HOME/.local/bin/rust-analyzer
         echo -e "  ${GREEN}✓${NC} rust-analyzer installed"
     else
         echo -e "  ${GREEN}✓${NC} rust-analyzer already installed"
