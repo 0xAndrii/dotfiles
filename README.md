@@ -64,21 +64,10 @@ chezmoi update        # Pull and apply updates
 chezmoi purge         # Remove managed files
 ```
 
-## Versions
+## Documentation
 
-Tool versions and metadata are managed in `.chezmoidata.yaml`.
-
-Structure:
-```yaml
-tools:
-  toolname:
-    description: "Tool description"
-    type: github  # or npm
-    repo: owner/repo  # for github
-    version: "1.0.0"
-```
-
-Automated updates: See [docs/automation.md](docs/automation.md)
+- [Tool Management](docs/tool-management.md) - Add or remove tools
+- [GitHub Workflows](docs/github-workflows.md) - Automated version updates
 
 ---
 
