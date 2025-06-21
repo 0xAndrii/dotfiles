@@ -99,12 +99,12 @@ jobs:
 
             # Compare versions
             if [ "$latest" = "error" ]; then
-              status="❌ Check failed"
+              status="Check failed"
               check_failures=$((check_failures + 1))
             elif [ "$(normalize_version "$current")" = "$(normalize_version "$latest")" ]; then
-              status="✅ Up to date"
+              status="Up to date"
             else
-              status="🔄 Update available"
+              status="Update available"
               updates+=("{\"tool\":\"$tool\",\"current\":\"$current\",\"latest\":\"$latest\",\"description\":\"$description\"}")
               has_updates=true
             fi
@@ -125,6 +125,6 @@ jobs:
           # Fail if there were check failures
           if [ $check_failures -gt 0 ]; then
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "❌ **$check_failures check(s) failed**" >> $GITHUB_STEP_SUMMARY
+            echo "**Error:** $check_failures check(s) failed" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi

@@ -37,7 +37,7 @@ jobs:
             for field in type version description; do
               value=$(yq ".tools.${tool}.${field}" .chezmoidata.yaml)
               if [ "$value" = "null" ] || [ -z "$value" ]; then
-                echo "❌ $tool: missing required field '$field'" | tee -a $GITHUB_STEP_SUMMARY
+                echo "Error: $tool: missing required field '$field'" | tee -a $GITHUB_STEP_SUMMARY
                 errors=$((errors + 1))
               fi
             done
@@ -47,18 +47,18 @@ jobs:
             case "$type" in
               github)
                 if [ "$(yq ".tools.${tool}.repo" .chezmoidata.yaml)" = "null" ]; then
-                  echo "❌ $tool: missing 'repo' field for github type" | tee -a $GITHUB_STEP_SUMMARY
+                  echo "Error: $tool: missing 'repo' field for github type" | tee -a $GITHUB_STEP_SUMMARY
                   errors=$((errors + 1))
                 fi
                 ;;
               npm)
                 if [ "$(yq ".tools.${tool}.package" .chezmoidata.yaml)" = "null" ]; then
-                  echo "❌ $tool: missing 'package' field for npm type" | tee -a $GITHUB_STEP_SUMMARY
+                  echo "Error: $tool: missing 'package' field for npm type" | tee -a $GITHUB_STEP_SUMMARY
                   errors=$((errors + 1))
                 fi
                 ;;
               *)
-                echo "❌ $tool: unknown type '$type'" | tee -a $GITHUB_STEP_SUMMARY
+                echo "Error: $tool: unknown type '$type'" | tee -a $GITHUB_STEP_SUMMARY
                 errors=$((errors + 1))
                 ;;
             esac
@@ -68,14 +68,14 @@ jobs:
             version=$(yq ".tools.${tool}.version" .chezmoidata.yaml)
             if [ "$pattern" != "null" ] && [ "$version" != "null" ]; then
               if ! echo "$version" | grep -qE "$pattern"; then
-                echo "❌ $tool: version '$version' doesn't match pattern '$pattern'" | tee -a $GITHUB_STEP_SUMMARY
+                echo "Error: $tool: version '$version' doesn't match pattern '$pattern'" | tee -a $GITHUB_STEP_SUMMARY
                 errors=$((errors + 1))
               fi
             fi
           done
 
           if [ $errors -eq 0 ]; then
-            echo "✅ All validations passed!" | tee -a $GITHUB_STEP_SUMMARY
+            echo "All validations passed" | tee -a $GITHUB_STEP_SUMMARY
           else
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "**Total errors: $errors**" >> $GITHUB_STEP_SUMMARY

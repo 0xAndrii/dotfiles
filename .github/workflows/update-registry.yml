@@ -51,28 +51,19 @@ jobs:
 
           # Create detailed PR body in temp directory
           cat > /tmp/pr-body.md << 'EOF'
-          ## 🔄 Tool Version Updates
+          Bumps the following dependencies:
 
-          This PR updates the tool registry with the latest available versions.
-
-          ### Updates
-
-          | Tool | Description | Current | Latest |
-          |------|-------------|---------|--------|
+          | Dependency | From | To |
+          | --- | --- | --- |
           EOF
 
-          echo "$updates" | jq -r '.[] | "| \(.tool) | \(.description) | \(.current) | **\(.latest)** |"' >> /tmp/pr-body.md
+          echo "$updates" | jq -r '.[] | "| **\(.tool)** | `\(.current)` | `\(.latest)` |"' >> /tmp/pr-body.md
 
           cat >> /tmp/pr-body.md << 'EOF'
 
-          ### What happens next?
-
-          1. **Review** the version changes
-          2. **Merge** this PR to update the registry
-          3. Users can then run `chezmoi update` to get the latest versions
-
           ---
-          *This PR was automatically created by the update-registry workflow.*
+
+          **Note:** *Version updates are fetched from the latest releases.*
           EOF
 
       - name: Get current date
