@@ -1,0 +1,96 @@
+name: Test Installation
+
+on:
+  pull_request:
+    paths:
+      - '.chezmoiscripts/**'
+      - '.chezmoidata.yaml'
+      - '.chezmoi.toml.tmpl'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
+    
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            runner: ubuntu-latest
+          - os: ubuntu-22.04
+            runner: ubuntu-22.04
+          - os: debian-12
+            runner: ubuntu-latest
+            container: debian:12
+      fail-fast: false
+
+    steps:
+      - name: Install prerequisites (Debian)
+        if: matrix.container == 'debian:12'
+        run: |
+          apt-get update
+          apt-get install -y curl git sudo
+
+      - name: Set up test user
+        run: |
+          if [ -f /etc/debian_version ]; then
+            useradd -m -s /bin/bash testuser || true
+            echo "testuser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/testuser
+          fi
+
+      - name: Test installation
+        run: |
+          # Run as non-root user
+          if id testuser &>/dev/null; then
+            su - testuser -c 'sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii'
+          else
+            sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
+          fi
+
+      - name: Verify tools
+        run: |
+          # Set PATH for tools
+          export PATH="$HOME/.local/bin:$PATH"
+          
+          # If running as testuser
+          if id testuser &>/dev/null; then
+            export PATH="/home/testuser/.local/bin:$PATH"
+          fi
+          
+          # Check each tool
+          echo "Checking installed tools..."
+          
+          for cmd in hx rg eza dust zellij ruff uv; do
+            if command -v $cmd &>/dev/null; then
+              echo "✓ $cmd: $($cmd --version 2>&1 | head -1)"
+            else
+              echo "✗ $cmd: not found"
+              exit 1
+            fi
+          done
+
+      - name: Test basic commands
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          
+          if id testuser &>/dev/null; then
+            export PATH="/home/testuser/.local/bin:$PATH"
+          fi
+          
+          # Test basic functionality
+          echo "Testing basic commands..."
+          rg --version
+          eza --version
+          dust --version
+          
+          # Verify configs exist
+          if id testuser &>/dev/null; then
+            HOME=/home/testuser
+          fi
+          
+          [ -f "$HOME/.bashrc" ] && echo "✓ .bashrc exists"
+          [ -f "$HOME/.gitconfig" ] && echo "✓ .gitconfig exists"
+          [ -d "$HOME/.config/helix" ] && echo "✓ Helix config exists"

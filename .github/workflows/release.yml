@@ -1,0 +1,111 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Get previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          
+          if [ -z "$PREV_TAG" ]; then
+            # First release - get all commits
+            COMMITS=$(git log --pretty=format:"- %s (%h)" | head -20)
+          else
+            # Get commits since last tag
+            COMMITS=$(git log --pretty=format:"- %s (%h)" ${PREV_TAG}..HEAD)
+          fi
+          
+          # Count changes by type
+          TOOLS_UPDATED=$(echo "$COMMITS" | grep -c "chore(deps):" || true)
+          DOCS_UPDATED=$(echo "$COMMITS" | grep -c "docs:" || true)
+          FEATURES=$(echo "$COMMITS" | grep -c "feat:" || true)
+          FIXES=$(echo "$COMMITS" | grep -c "fix:" || true)
+          
+          # Create release notes
+          cat > release-notes.md << EOF
+          ## What's Changed
+          
+          EOF
+          
+          if [ $TOOLS_UPDATED -gt 0 ]; then
+            echo "### Tool Updates" >> release-notes.md
+            echo "$COMMITS" | grep "chore(deps):" >> release-notes.md || true
+            echo "" >> release-notes.md
+          fi
+          
+          if [ $FEATURES -gt 0 ]; then
+            echo "### Features" >> release-notes.md
+            echo "$COMMITS" | grep "feat:" >> release-notes.md || true
+            echo "" >> release-notes.md
+          fi
+          
+          if [ $FIXES -gt 0 ]; then
+            echo "### Bug Fixes" >> release-notes.md
+            echo "$COMMITS" | grep "fix:" >> release-notes.md || true
+            echo "" >> release-notes.md
+          fi
+          
+          if [ $DOCS_UPDATED -gt 0 ]; then
+            echo "### Documentation" >> release-notes.md
+            echo "$COMMITS" | grep "docs:" >> release-notes.md || true
+            echo "" >> release-notes.md
+          fi
+          
+          # Add installation section
+          cat >> release-notes.md << EOF
+          
+          ## Installation
+          
+          \`\`\`bash
+          sh -c "\$(curl -fsLS get.chezmoi.io)" -- -b \$HOME/.local/bin init --apply 0xAndrii
+          \`\`\`
+          
+          ## Update
+          
+          \`\`\`bash
+          chezmoi update
+          \`\`\`
+          EOF
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          generate_release_notes: false
