@@ -26,34 +26,42 @@ jobs:
             runner: ubuntu-latest
             container: debian:12
       fail-fast: false
+    
+    container: ${{ matrix.container }}
 
     steps:
       - name: Install prerequisites (Debian)
         if: matrix.container == 'debian:12'
         run: |
           apt-get update
-          apt-get install -y curl git sudo ca-certificates build-essential unzip bash
+          apt-get install -y curl git sudo ca-certificates build-essential unzip bash xz-utils
           # Create a non-root user for testing
           useradd -m -s /bin/bash testuser
           echo "testuser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/testuser
+          # Set git safe directory for testuser
+          su - testuser -c "git config --global --add safe.directory '*'"
 
       - name: Test installation
         run: |
+          set -x  # Enable debugging
+          
           # Install chezmoi and apply dotfiles
-          if [ -f /.dockerenv ] || [ "$container" = "debian:12" ]; then
+          if [ -n "${{ matrix.container }}" ]; then
+            echo "Running in container environment"
             # In container, run as testuser
-            su - testuser -c 'sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii'
-            export TEST_USER="testuser"
+            su - testuser -c 'curl -fsLS get.chezmoi.io | sh -s -- -b $HOME/.local/bin'
+            su - testuser -c '$HOME/.local/bin/chezmoi init --apply 0xAndrii'
           else
+            echo "Running on regular runner"
             # On regular runners
-            sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
-            export TEST_USER="runner"
+            curl -fsLS get.chezmoi.io | sh -s -- -b $HOME/.local/bin
+            $HOME/.local/bin/chezmoi init --apply 0xAndrii
           fi
 
       - name: Verify tools
         run: |
           # Determine user home
-          if [ -f /.dockerenv ] || [ "$container" = "debian:12" ]; then
+          if [ -n "${{ matrix.container }}" ]; then
             USER_HOME="/home/testuser"
             RUN_AS="su - testuser -c"
           else
@@ -76,7 +84,7 @@ jobs:
       - name: Test basic commands
         run: |
           # Determine user home
-          if [ -f /.dockerenv ] || [ "$container" = "debian:12" ]; then
+          if [ -n "${{ matrix.container }}" ]; then
             USER_HOME="/home/testuser"
             RUN_AS="su - testuser -c"
           else
