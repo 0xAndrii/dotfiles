@@ -94,13 +94,13 @@ else
 fi
 
 # Zellij
-if ! command -v zellij &> /dev/null || [[ $(zellij --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$ZELLIJ_VERSION" ]]; then
-    echo "  → Installing Zellij v${ZELLIJ_VERSION}..."
+if ! command -v zellij &> /dev/null || [[ $(zellij --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "${ZELLIJ_VERSION#v}" ]]; then
+    echo "  → Installing Zellij ${ZELLIJ_VERSION}..."
     cd /tmp
     if [[ "$ARCH" == "x86_64" ]]; then
-        curl -sL -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz"
+        curl -sL -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz"
     else
-        curl -sL -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-aarch64-unknown-linux-musl.tar.gz"
+        curl -sL -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/${ZELLIJ_VERSION}/zellij-aarch64-unknown-linux-musl.tar.gz"
     fi
     tar xzf zellij.tar.gz
     mv zellij $HOME/.local/bin/
