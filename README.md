@@ -19,7 +19,7 @@ sh -c "$(curl -fsLS chezmoi.io/get)" -- \
   --force \
   --refresh-externals \
   --purge \
-  --cache-dir "$TMPDIR/cache" \
+  --cache "$TMPDIR/cache" \
   0xAndrii && \
 rm -rf "$TMPDIR"
 ```
@@ -73,4 +73,4 @@ Edit `.chezmoidata.yaml`, then `chezmoi apply`.
 
 ---
 
-*Less is more.*
+_Less is more._
