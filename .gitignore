@@ -68,3 +68,6 @@ secrets/
 # Misc
 .cache/
 .tmp/
+
+# Project-specific
+CLAUDE.md
