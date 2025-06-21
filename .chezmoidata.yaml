@@ -2,7 +2,7 @@
 versions:
   # Core tools
   helix: "25.01"
-  ripgrep: "14.1.0"
+  ripgrep: "14.1.1"
   eza: "v0.21.5"
   dust: "v1.2.1"
   zellij: "0.41.2"
