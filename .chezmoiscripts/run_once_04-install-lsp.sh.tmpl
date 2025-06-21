@@ -1,52 +1,55 @@
 #!/bin/bash
 set -e
 
-# Language servers and Claude Code
+# Language servers
 
-NODE_VERSION="v22.16.0"
+NODE_VERSION="22"
 PYRIGHT_VERSION="1.1.402"
 PRETTIER_VERSION="3.5.3"
-CLAUDE_CODE_VERSION="1.0.31"
 
-echo "[4/4] Installing language servers..."
+# Colors
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo "[4/5] Installing language servers..."
 
 # Node.js
 if ! command -v node &> /dev/null; then
-    echo "Installing Node.js..."
+    echo "  → Installing Node.js v${NODE_VERSION}..."
     curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
     sudo apt-get install -y nodejs
+    echo -e "  ${GREEN}✓${NC} Node.js installed"
+else
+    echo -e "  ${GREEN}✓${NC} Node.js already installed"
 fi
 
 # Language servers
-echo "Installing language servers..."
+echo "  → Installing language servers..."
 sudo npm install -g -s \
     prettier@${PRETTIER_VERSION} \
     pyright@${PYRIGHT_VERSION} \
     yaml-language-server@latest
+echo -e "  ${GREEN}✓${NC} Language servers installed"
 
 # rust-analyzer (if Rust installed)
-if command -v cargo &> /dev/null && ! command -v rust-analyzer &> /dev/null; then
-    echo "Installing rust-analyzer..."
-    cd /tmp
-    ARCH=$(uname -m)
-    if [[ "$ARCH" == "x86_64" ]]; then
-        curl -sL -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz"
+if command -v cargo &> /dev/null; then
+    if ! command -v rust-analyzer &> /dev/null; then
+        echo "  → Installing rust-analyzer..."
+        cd /tmp
+        ARCH=$(uname -m)
+        if [[ "$ARCH" == "x86_64" ]]; then
+            curl -sL -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz"
+        else
+            curl -sL -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-unknown-linux-gnu.gz"
+        fi
+        gunzip rust-analyzer.gz
+        sudo mv rust-analyzer /usr/local/bin/
+        sudo chmod +x /usr/local/bin/rust-analyzer
+        echo -e "  ${GREEN}✓${NC} rust-analyzer installed"
     else
-        curl -sL -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-unknown-linux-gnu.gz"
+        echo -e "  ${GREEN}✓${NC} rust-analyzer already installed"
     fi
-    gunzip rust-analyzer.gz
-    sudo mv rust-analyzer /usr/local/bin/
-    sudo chmod +x /usr/local/bin/rust-analyzer
 fi
 
-# Claude Code (local)
-CLAUDE_LOCAL_DIR="$HOME/.claude/local"
-if [ ! -f "$CLAUDE_LOCAL_DIR/claude" ]; then
-    echo "Installing Claude Code..."
-    mkdir -p "$CLAUDE_LOCAL_DIR"
-    cd "$CLAUDE_LOCAL_DIR"
-    npm install -s @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
-    ln -sf "$CLAUDE_LOCAL_DIR/node_modules/.bin/claude" "$CLAUDE_LOCAL_DIR/claude"
-fi
+echo -e "${GREEN}Done! All tools installed successfully.${NC}"
 
-echo "Done! All tools installed."

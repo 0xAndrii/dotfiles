@@ -29,15 +29,7 @@ Thumbs.db
 # Logs
 *.log
 
-# Shell-specific (ignore if not using that shell)
-{{- if ne .shell "bash" }}
-.bashrc
-.bash_profile
-.bash_history
-{{- end }}
-
-{{- if ne .shell "zsh" }}
+# Zsh files (we only use bash)
 .zshrc
 .zprofile
 .zsh_history
-{{- end }}

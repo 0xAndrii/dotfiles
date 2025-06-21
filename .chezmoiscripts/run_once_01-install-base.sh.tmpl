@@ -5,15 +5,26 @@ set -e
 
 source /etc/os-release
 
-echo "[1/4] Installing base packages..."
+# Colors
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo "[1/5] Installing base packages..."
 
 if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
+    echo "  → Updating package list..."
     sudo apt update
+    echo "  → Installing packages..."
     sudo apt install -y curl git build-essential unzip
+    echo -e "  ${GREEN}✓${NC} Base packages installed"
 elif [[ "$ID" == "fedora" ]]; then
+    echo "  → Installing packages..."
     sudo dnf install -y curl git gcc make unzip
+    echo -e "  ${GREEN}✓${NC} Base packages installed"
 elif [[ "$ID" == "arch" ]]; then
+    echo "  → Installing packages..."
     sudo pacman -Sy --noconfirm curl git base-devel unzip
+    echo -e "  ${GREEN}✓${NC} Base packages installed"
 else
     echo "Unsupported distribution: $ID" >&2
     exit 1

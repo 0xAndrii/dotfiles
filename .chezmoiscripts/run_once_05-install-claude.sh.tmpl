@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+# Claude Code local installation
+
+CLAUDE_CODE_VERSION="1.0.31"
+
+# Colors
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo "[5/5] Installing Claude Code..."
+
+# Node.js required
+if ! command -v node &> /dev/null; then
+    echo "Error: Node.js is required but not installed" >&2
+    exit 1
+fi
+
+# Claude Code (local)
+CLAUDE_LOCAL_DIR="$HOME/.claude/local"
+if [ ! -f "$CLAUDE_LOCAL_DIR/claude" ]; then
+    echo "  → Installing Claude Code v${CLAUDE_CODE_VERSION}..."
+    mkdir -p "$CLAUDE_LOCAL_DIR"
+    cd "$CLAUDE_LOCAL_DIR"
+    npm install -s @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+    ln -sf "$CLAUDE_LOCAL_DIR/node_modules/.bin/claude" "$CLAUDE_LOCAL_DIR/claude"
+    echo -e "  ${GREEN}✓${NC} Claude Code installed"
+else
+    echo -e "  ${GREEN}✓${NC} Claude Code already installed"
+fi
+

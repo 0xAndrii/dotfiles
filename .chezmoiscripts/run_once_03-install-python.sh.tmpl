@@ -6,16 +6,26 @@ set -e
 RUFF_VERSION="0.12.0"
 UV_VERSION="0.7.13"
 
-echo "[3/4] Installing Python tools..."
+# Colors
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+echo "[3/5] Installing Python tools..."
 
 # Ruff
 if ! command -v ruff &> /dev/null || [[ $(ruff --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$RUFF_VERSION" ]]; then
-    echo "Installing Ruff..."
+    echo "  → Installing Ruff v${RUFF_VERSION}..."
     curl -LsSf "https://astral.sh/ruff/${RUFF_VERSION}/install.sh" | sh
+    echo -e "  ${GREEN}✓${NC} Ruff installed"
+else
+    echo -e "  ${GREEN}✓${NC} Ruff already up to date"
 fi
 
 # uv
 if ! command -v uv &> /dev/null || [[ $(uv --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$UV_VERSION" ]]; then
-    echo "Installing uv..."
+    echo "  → Installing uv v${UV_VERSION}..."
     curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh
+    echo -e "  ${GREEN}✓${NC} uv installed"
+else
+    echo -e "  ${GREEN}✓${NC} uv already up to date"
 fi
