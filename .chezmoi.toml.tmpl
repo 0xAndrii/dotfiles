@@ -1,18 +1,12 @@
 {{- $email := promptStringOnce . "email" "Your email address" -}}
 {{- $name := promptStringOnce . "name" "Your full name" -}}
-{{- $github_username := promptStringOnce . "github_username" "Your GitHub username" -}}
-{{- $editor := promptStringOnce . "editor" "Your preferred editor (hx/vim/nano)" "hx" -}}
-{{- $shell := promptStringOnce . "shell" "Your preferred shell (bash/zsh)" "bash" -}}
 
 [data]
     email = {{ $email | quote }}
     name = {{ $name | quote }}
-    github_username = {{ $github_username | quote }}
-    editor = {{ $editor | quote }}
-    shell = {{ $shell | quote }}
 
 [edit]
-    command = {{ $editor | quote }}
+    command = "hx"
 
 [git]
     autoCommit = false
