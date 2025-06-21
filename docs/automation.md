@@ -1,4 +1,4 @@
-# GitHub Automation
+# Automation Documentation
 
 Professional, modular tool version management system.
 

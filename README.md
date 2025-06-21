@@ -78,7 +78,7 @@ tools:
     version: "1.0.0"
 ```
 
-Automated updates: See [.github/README.md](.github/README.md)
+Automated updates: See [docs/automation.md](docs/automation.md)
 
 ---
 
