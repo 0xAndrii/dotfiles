@@ -8,17 +8,10 @@ Minimal Linux development environment. Chezmoi-managed.
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
 ```
 
-### Reinstall (force overwrite)
+### Uninstall
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- \
-  -b $HOME/.local/bin \
-  init \
-  --apply \
-  --force \
-  --refresh-externals \
-  --purge \
-  0xAndrii
+chezmoi purge  # Remove chezmoi config files
 ```
 
 ## Tools
