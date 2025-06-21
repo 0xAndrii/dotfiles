@@ -7,11 +7,11 @@ source /etc/os-release
 ARCH=$(uname -m)
 
 # Versions
-HELIX_VERSION="{{ .versions.helix }}"
-EZA_VERSION="{{ .versions.eza }}"
-DUST_VERSION="{{ .versions.dust }}"
-ZELLIJ_VERSION="{{ .versions.zellij }}"
-TAPLO_VERSION="{{ .versions.taplo }}"
+HELIX_VERSION="{{ .tools.helix.version }}"
+EZA_VERSION="{{ .tools.eza.version }}"
+DUST_VERSION="{{ .tools.dust.version }}"
+ZELLIJ_VERSION="{{ .tools.zellij.version }}"
+TAPLO_VERSION="{{ .tools.taplo.version }}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -39,7 +39,7 @@ else
 fi
 
 # Ripgrep
-RIPGREP_VERSION="{{ .versions.ripgrep }}"
+RIPGREP_VERSION="{{ .tools.ripgrep.version }}"
 if ! command -v rg &> /dev/null || [[ $(rg --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "$RIPGREP_VERSION" ]]; then
     echo "  → Installing Ripgrep v${RIPGREP_VERSION}..."
     cd /tmp

@@ -66,7 +66,17 @@ chezmoi purge         # Remove managed files
 
 ## Versions
 
-Edit `.chezmoidata.yaml`, then `chezmoi apply`.
+Tool versions and metadata are managed in `.chezmoidata.yaml`. 
+
+Structure:
+```yaml
+tools:
+  toolname:
+    description: "Tool description"
+    type: github  # or npm
+    repo: owner/repo  # for github
+    version: "1.0.0"
+```
 
 Automated updates: See [.github/README.md](.github/README.md)
 

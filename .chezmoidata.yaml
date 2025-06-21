@@ -1,33 +1,90 @@
-# Tool versions
-versions:
-  # Core tools
-  # https://github.com/helix-editor/helix/releases
-  helix: "25.01.1"
-  # https://github.com/BurntSushi/ripgrep/releases
-  ripgrep: "14.1.1"
-  # https://github.com/eza-community/eza/releases
-  eza: "v0.21.5"
-  # https://github.com/bootandy/dust/releases
-  dust: "v1.2.1"
-  # https://github.com/zellij-org/zellij/releases
-  zellij: "0.42.2"
-  # https://github.com/tamasfe/taplo/releases
-  taplo: "0.10.0"
-  
+# Tool Registry - Central version control and metadata
+# This is the single source of truth for all tool versions
+
+tools:
+  # Core development tools
+  helix:
+    description: "Modal text editor"
+    type: github
+    repo: helix-editor/helix
+    version: "25.01.1"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  ripgrep:
+    description: "Fast code search"
+    type: github
+    repo: BurntSushi/ripgrep
+    version: "14.1.1"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  eza:
+    description: "Modern ls replacement"
+    type: github
+    repo: eza-community/eza
+    version: "v0.21.5"
+    pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  dust:
+    description: "Disk usage analyzer"
+    type: github
+    repo: bootandy/dust
+    version: "v1.2.1"
+    pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  zellij:
+    description: "Terminal multiplexer"
+    type: github
+    repo: zellij-org/zellij
+    version: "v0.42.2"
+    pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  taplo:
+    description: "TOML toolkit"
+    type: github
+    repo: tamasfe/taplo
+    version: "0.10.0"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
   # Python tools
-  # https://github.com/astral-sh/ruff/releases
-  ruff: "0.12.0"
-  # https://github.com/astral-sh/uv/releases
-  uv: "0.7.13"
-  
+  ruff:
+    description: "Python linter and formatter"
+    type: github
+    repo: astral-sh/ruff
+    version: "0.12.0"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  uv:
+    description: "Python package manager"
+    type: github
+    repo: astral-sh/uv
+    version: "0.7.13"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
   # Language servers
-  # https://nodejs.org/en/about/releases/
-  node: "22"
-  # https://github.com/microsoft/pyright/releases
-  pyright: "1.1.402"
-  # https://github.com/prettier/prettier/releases
-  prettier: "3.5.3"
-  
-  # AI
-  # https://www.npmjs.com/package/@anthropic-ai/claude-code
-  claude_code: "1.0.31"
+  node:
+    description: "JavaScript runtime"
+    type: nodejs
+    version: "22"
+    pattern: "^[0-9]+$"
+    
+  pyright:
+    description: "Python language server"
+    type: npm
+    package: pyright
+    version: "1.1.402"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  prettier:
+    description: "Code formatter"
+    type: npm
+    package: prettier
+    version: "3.5.3"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    
+  # AI tools
+  claude_code:
+    description: "AI coding assistant"
+    type: npm
+    package: "@anthropic-ai/claude-code"
+    version: "1.0.31"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"

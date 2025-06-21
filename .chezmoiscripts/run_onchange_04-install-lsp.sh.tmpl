@@ -3,9 +3,9 @@ set -e
 
 # Language servers
 
-NODE_VERSION="{{ .versions.node }}"
-PYRIGHT_VERSION="{{ .versions.pyright }}"
-PRETTIER_VERSION="{{ .versions.prettier }}"
+NODE_VERSION="{{ .tools.node.version }}"
+PYRIGHT_VERSION="{{ .tools.pyright.version }}"
+PRETTIER_VERSION="{{ .tools.prettier.version }}"
 
 # Colors
 GREEN='\033[0;32m'
