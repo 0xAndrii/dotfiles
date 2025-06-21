@@ -49,8 +49,8 @@ jobs:
         run: |
           updates='${{ needs.check-updates.outputs.updates }}'
           
-          # Create detailed PR body
-          cat > pr-body.md << 'EOF'
+          # Create detailed PR body in temp directory
+          cat > /tmp/pr-body.md << 'EOF'
           ## 🔄 Tool Version Updates
           
           This PR updates the tool registry with the latest available versions.
@@ -61,9 +61,9 @@ jobs:
           |------|-------------|---------|--------|
           EOF
           
-          echo "$updates" | jq -r '.[] | "| \(.tool) | \(.description) | \(.current) | **\(.latest)** |"' >> pr-body.md
+          echo "$updates" | jq -r '.[] | "| \(.tool) | \(.description) | \(.current) | **\(.latest)** |"' >> /tmp/pr-body.md
           
-          cat >> pr-body.md << 'EOF'
+          cat >> /tmp/pr-body.md << 'EOF'
           
           ### What happens next?
           
@@ -80,14 +80,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: update-tools-${{ github.run_number }}
-          title: "chore: update tool versions"
-          body-path: pr-body.md
+          title: "chore(deps): bump tool versions - $(date +'%Y-%m-%d')"
+          body-path: /tmp/pr-body.md
           commit-message: |
-            chore: update tool versions in registry
+            chore(deps): bump tool versions
             
-            ${{ needs.check-updates.outputs.updates }}
-          labels: |
-            dependencies
-            automated
+            Updates available tool versions to their latest releases.
+            See PR description for detailed changes.
           assignees: ${{ github.actor }}
-          reviewers: ${{ github.actor }}
