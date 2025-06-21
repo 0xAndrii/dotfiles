@@ -6,6 +6,7 @@ set -e
 # Node.js - we'll use latest LTS if not already installed
 PYRIGHT_VERSION="{{ .tools.pyright.version }}"
 PRETTIER_VERSION="{{ .tools.prettier.version }}"
+YAML_LS_VERSION="{{ .tools.yaml_language_server.version }}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -58,13 +59,13 @@ else
     echo -e "  ${GREEN}✓${NC} Pyright already up to date"
 fi
 
-# yaml-language-server (always latest)
-if ! command -v yaml-language-server &> /dev/null; then
-    echo "  → Installing YAML Language Server..."
-    NPM_CONFIG_PREFIX=$HOME/.local npm install -g --silent yaml-language-server@latest >/dev/null 2>&1
+# Check and install yaml-language-server
+if ! command -v yaml-language-server &> /dev/null || [[ $(yaml-language-server --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "${YAML_LS_VERSION}" ]]; then
+    echo "  → Installing YAML Language Server v${YAML_LS_VERSION}..."
+    NPM_CONFIG_PREFIX=$HOME/.local npm install -g --silent yaml-language-server@${YAML_LS_VERSION} >/dev/null 2>&1
     echo -e "  ${GREEN}✓${NC} YAML Language Server installed"
 else
-    echo -e "  ${GREEN}✓${NC} YAML Language Server already installed"
+    echo -e "  ${GREEN}✓${NC} YAML Language Server already up to date"
 fi
 
 # rust-analyzer (if Rust installed)
