@@ -61,8 +61,10 @@ ruff format
 uv pip install
 
 # Manage
-chezmoi diff
-chezmoi apply
+chezmoi diff          # Local changes
+chezmoi apply         # Apply changes
+chezmoi update -n     # Preview updates from git
+chezmoi update        # Pull and apply updates
 ```
 
 ## Versions
