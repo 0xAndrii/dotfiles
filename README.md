@@ -68,6 +68,8 @@ chezmoi purge         # Remove managed files
 
 Edit `.chezmoidata.yaml`, then `chezmoi apply`.
 
+Automated updates: See [.github/README.md](.github/README.md)
+
 ---
 
 _Less is more._
