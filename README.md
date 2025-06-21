@@ -8,6 +8,12 @@ Minimal Linux development environment. Chezmoi-managed.
 sh -c "$(curl -fsLS chezmoi.io/get)" -- -b /tmp/bin init --apply 0xAndrii
 ```
 
+### Fresh install (clear cache)
+
+```bash
+sh -c "$(curl -fsLS chezmoi.io/get)" -- -b /tmp/bin init --apply --force --refresh-externals --purge 0xAndrii
+```
+
 ## Tools
 
 ```
