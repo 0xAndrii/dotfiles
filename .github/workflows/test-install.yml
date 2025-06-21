@@ -43,19 +43,17 @@ jobs:
 
       - name: Test installation
         run: |
-          set -x  # Enable debugging
-          
           # Install chezmoi and apply dotfiles
           if [ -n "${{ matrix.container }}" ]; then
             echo "Running in container environment"
             # In container, run as testuser
             su - testuser -c 'curl -fsLS get.chezmoi.io | sh -s -- -b $HOME/.local/bin'
-            su - testuser -c '$HOME/.local/bin/chezmoi init --apply 0xAndrii'
+            su - testuser -c '$HOME/.local/bin/chezmoi init --apply 0xAndrii --promptString email=test@example.com --promptString name="Test User"'
           else
             echo "Running on regular runner"
             # On regular runners
             curl -fsLS get.chezmoi.io | sh -s -- -b $HOME/.local/bin
-            $HOME/.local/bin/chezmoi init --apply 0xAndrii
+            $HOME/.local/bin/chezmoi init --apply 0xAndrii --promptString email=test@example.com --promptString name="Test User"
           fi
 
       - name: Verify tools
