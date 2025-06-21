@@ -28,6 +28,7 @@ claude      AI assistant
 ~/.config/helix/             Editor + LSP
 ~/.config/zellij/            Terminal layouts
 ~/.gitconfig                 Git basics
+~/.claude/                   AI settings
 ```
 
 ## Usage
