@@ -2,7 +2,7 @@
 versions:
   # Core tools
   # https://github.com/helix-editor/helix/releases
-  helix: "25.01"
+  helix: "25.01.1"
   # https://github.com/BurntSushi/ripgrep/releases
   ripgrep: "14.1.1"
   # https://github.com/eza-community/eza/releases
