@@ -32,33 +32,17 @@ jobs:
         if: matrix.container == 'debian:12'
         run: |
           apt-get update
-          apt-get install -y curl git sudo
-
-      - name: Set up test user
-        run: |
-          if [ -f /etc/debian_version ]; then
-            useradd -m -s /bin/bash testuser || true
-            echo "testuser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/testuser
-          fi
+          apt-get install -y curl git sudo ca-certificates make gcc unzip
 
       - name: Test installation
         run: |
-          # Run as non-root user
-          if id testuser &>/dev/null; then
-            su - testuser -c 'sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii'
-          else
-            sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
-          fi
+          # Install chezmoi and apply dotfiles
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
 
       - name: Verify tools
         run: |
           # Set PATH for tools
           export PATH="$HOME/.local/bin:$PATH"
-          
-          # If running as testuser
-          if id testuser &>/dev/null; then
-            export PATH="/home/testuser/.local/bin:$PATH"
-          fi
           
           # Check each tool
           echo "Checking installed tools..."
@@ -76,10 +60,6 @@ jobs:
         run: |
           export PATH="$HOME/.local/bin:$PATH"
           
-          if id testuser &>/dev/null; then
-            export PATH="/home/testuser/.local/bin:$PATH"
-          fi
-          
           # Test basic functionality
           echo "Testing basic commands..."
           rg --version
@@ -87,10 +67,6 @@ jobs:
           dust --version
           
           # Verify configs exist
-          if id testuser &>/dev/null; then
-            HOME=/home/testuser
-          fi
-          
           [ -f "$HOME/.bashrc" ] && echo "✓ .bashrc exists"
           [ -f "$HOME/.gitconfig" ] && echo "✓ .gitconfig exists"
           [ -d "$HOME/.config/helix" ] && echo "✓ Helix config exists"
