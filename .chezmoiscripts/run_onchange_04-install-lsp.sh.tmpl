@@ -3,7 +3,7 @@ set -e
 
 # Language servers
 
-NODE_VERSION="22"  # LTS version, just for fnm installation
+# Node.js - we'll use latest LTS if not already installed
 PYRIGHT_VERSION="{{ .tools.pyright.version }}"
 PRETTIER_VERSION="{{ .tools.prettier.version }}"
 
@@ -22,11 +22,11 @@ if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
         curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell >/dev/null 2>&1
     fi
     
-    # Source fnm and install Node
+    # Source fnm and install latest LTS Node
     export PATH="$HOME/.local/share/fnm:$PATH"
     eval "$(fnm env --use-on-cd)"
-    fnm install ${NODE_VERSION} >/dev/null 2>&1
-    fnm use ${NODE_VERSION} >/dev/null 2>&1
+    fnm install --lts >/dev/null 2>&1
+    fnm use lts-latest >/dev/null 2>&1
     
     echo -e "  ${GREEN}✓${NC} Node.js installed locally"
 else
