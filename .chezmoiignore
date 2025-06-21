@@ -1,0 +1,43 @@
+# Chezmoi ignore file
+README.md
+LICENSE
+.git
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+
+# Archives
+*.tar
+*.tar.gz
+*.zip
+*.rar
+
+# Logs
+*.log
+
+# Shell-specific (ignore if not using that shell)
+{{- if ne .shell "bash" }}
+.bashrc
+.bash_profile
+.bash_history
+{{- end }}
+
+{{- if ne .shell "zsh" }}
+.zshrc
+.zprofile
+.zsh_history
+{{- end }}

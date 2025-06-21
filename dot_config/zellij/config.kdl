@@ -1,0 +1,19 @@
+// Minimal Zellij configuration
+
+// Default layout
+default_layout "default"
+
+// UI settings
+pane_frames false
+
+// Theme
+theme "tokyo-night"
+
+// Copy to system clipboard
+copy_on_select true
+
+// Mouse support
+mouse_mode true
+
+// Scrollback
+scroll_buffer_size 10000

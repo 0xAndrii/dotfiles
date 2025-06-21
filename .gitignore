@@ -1,0 +1,70 @@
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Editor directories
+.vscode/
+.idea/
+*.sublime-*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+.venv
+.env
+
+# Node.js (for Claude Code local installation)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# Secrets and credentials
+*.pem
+*.key
+.env.*
+secrets/
+
+# Chezmoi
+.chezmoi.toml
+.chezmoiexternal.toml
+.chezmoiroot
+.chezmoiversion
+
+# Local overrides
+*.local
+!dot_bashrc.local
+
+# Claude Code
+.claude/local/node_modules/
+.claude/local/package-lock.json
+.claude/local/package.json
+.claude/cache/
+.claude/logs/
+
+# Misc
+.cache/
+.tmp/

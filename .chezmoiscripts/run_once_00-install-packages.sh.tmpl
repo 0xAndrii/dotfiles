@@ -1,0 +1,328 @@
+#!/bin/bash
+# Minimal package installation for developer essentials
+
+set -e
+
+# ============================================
+# TOOL VERSIONS
+# ============================================
+HELIX_VERSION="25.01"
+HELIX_CHECK_VERSION="25.1"  # Version as reported by hx --version
+EZA_VERSION="v0.21.5"
+DUST_VERSION="v1.2.1"
+ZELLIJ_VERSION="0.41.2"
+RUFF_VERSION="0.12.0"
+UV_VERSION="0.7.13"
+# Language servers
+TAPLO_VERSION="0.10.0"
+NODE_VERSION="v22.16.0"  # For npm-based language servers
+PYRIGHT_VERSION="1.1.402"
+PRETTIER_VERSION="3.5.3"
+# Claude Code
+CLAUDE_CODE_VERSION="1.0.31"
+
+# ============================================
+# LOGGING FUNCTIONS
+# ============================================
+log_info() {
+    echo -e "\033[0;32m[INFO]\033[0m $1"
+}
+
+log_error() {
+    echo -e "\033[0;31m[ERROR]\033[0m $1" >&2
+}
+
+# ============================================
+# UTILITY FUNCTIONS
+# ============================================
+# Check if tool needs installation/upgrade
+# Usage: check_tool_version "tool_name" "command" "expected_version" "version_pattern"
+# Returns: 0 if up-to-date, 1 if needs install/upgrade
+check_tool_version() {
+    local tool_name="$1"
+    local command="$2"
+    local expected_version="$3"
+    local version_pattern="${4:-[0-9]+\.[0-9]+\.[0-9]+}"  # Default pattern
+    
+    if command -v "$command" &> /dev/null; then
+        local current_version=$("$command" --version 2>/dev/null | grep -oE "$version_pattern" | head -1)
+        if [[ "$current_version" == "$expected_version" ]]; then
+            log_info "$tool_name $expected_version is already installed"
+            return 0
+        else
+            log_info "$tool_name $current_version found, upgrading to $expected_version..."
+            return 1
+        fi
+    else
+        log_info "Installing $tool_name $expected_version..."
+        return 1
+    fi
+}
+
+# ============================================
+# SYSTEM DETECTION
+# ============================================
+ARCH=$(uname -m)
+source /etc/os-release
+
+# ============================================
+# PACKAGE MANAGER SETUP
+# ============================================
+install_packages() {
+    log_info "Installing system packages..."
+    
+    if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
+        sudo apt update
+        sudo apt install -y curl git build-essential unzip
+    elif [[ "$ID" == "fedora" ]]; then
+        sudo dnf install -y curl git gcc make unzip
+    elif [[ "$ID" == "arch" ]]; then
+        sudo pacman -Sy --noconfirm curl git base-devel unzip
+    else
+        log_error "Unsupported distribution: $ID"
+        exit 1
+    fi
+}
+
+# ============================================
+# HELIX INSTALLATION
+# ============================================
+install_helix() {
+    check_tool_version "Helix" "hx" "$HELIX_CHECK_VERSION" "[0-9]+\.[0-9]+" && return 0
+    
+    cd /tmp
+    curl -L -o helix.tar.xz "https://github.com/helix-editor/helix/releases/download/${HELIX_VERSION}/helix-${HELIX_VERSION}-${ARCH}-linux.tar.xz"
+    tar xf helix.tar.xz
+    sudo mv "helix-${HELIX_VERSION}-${ARCH}-linux/hx" /usr/local/bin/
+    sudo chmod +x /usr/local/bin/hx
+    
+    # Install runtime files
+    sudo mkdir -p /usr/local/share/helix
+    sudo cp -r "helix-${HELIX_VERSION}-${ARCH}-linux/runtime" /usr/local/share/helix/
+    
+    rm -rf helix.tar.xz "helix-${HELIX_VERSION}-${ARCH}-linux"
+    log_info "Helix installed successfully"
+}
+
+# ============================================
+# RIPGREP INSTALLATION
+# ============================================
+install_ripgrep() {
+    if command -v rg &> /dev/null; then
+        log_info "Ripgrep is already installed"
+        return
+    fi
+    
+    log_info "Installing Ripgrep..."
+    
+    if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
+        sudo apt install -y ripgrep
+    elif [[ "$ID" == "fedora" ]]; then
+        sudo dnf install -y ripgrep
+    elif [[ "$ID" == "arch" ]]; then
+        sudo pacman -S --noconfirm ripgrep
+    fi
+    
+    log_info "Ripgrep installed successfully"
+}
+
+# ============================================
+# EZA INSTALLATION
+# ============================================
+install_eza() {
+    check_tool_version "Eza" "eza" "$EZA_VERSION" "v[0-9]+\.[0-9]+\.[0-9]+" && return 0
+    cd /tmp
+    
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -L -o eza.zip "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_x86_64-unknown-linux-gnu.zip"
+    else
+        curl -L -o eza.zip "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_aarch64-unknown-linux-gnu.zip"
+    fi
+    
+    unzip -o eza.zip
+    sudo mv eza /usr/local/bin/
+    sudo chmod +x /usr/local/bin/eza
+    rm eza.zip
+    
+    log_info "Eza installed successfully"
+}
+
+# ============================================
+# DUST INSTALLATION
+# ============================================
+install_dust() {
+    DUST_CHECK_VERSION="${DUST_VERSION#v}"  # Remove 'v' prefix for comparison
+    check_tool_version "Dust" "dust" "$DUST_CHECK_VERSION" && return 0
+    cd /tmp
+    
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -L -o dust.tar.gz "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+    else
+        curl -L -o dust.tar.gz "https://github.com/bootandy/dust/releases/download/${DUST_VERSION}/dust-${DUST_VERSION}-aarch64-unknown-linux-gnu.tar.gz"
+    fi
+    
+    tar xzf dust.tar.gz
+    sudo mv dust-*/dust /usr/local/bin/
+    sudo chmod +x /usr/local/bin/dust
+    rm -rf dust.tar.gz dust-*/
+    
+    log_info "Dust installed successfully"
+}
+
+# ============================================
+# ZELLIJ INSTALLATION
+# ============================================
+install_zellij() {
+    check_tool_version "Zellij" "zellij" "$ZELLIJ_VERSION" && return 0
+    
+    cd /tmp
+    
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -L -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz"
+    else
+        curl -L -o zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-aarch64-unknown-linux-musl.tar.gz"
+    fi
+    
+    tar xzf zellij.tar.gz
+    sudo mv zellij /usr/local/bin/
+    sudo chmod +x /usr/local/bin/zellij
+    rm zellij.tar.gz
+    
+    log_info "Zellij installed successfully"
+}
+
+# ============================================
+# RUFF INSTALLATION
+# ============================================
+install_ruff() {
+    check_tool_version "Ruff" "ruff" "$RUFF_VERSION" && return 0
+    
+    # Use official installer script with specific version
+    curl -LsSf "https://astral.sh/ruff/${RUFF_VERSION}/install.sh" | sh
+    
+    log_info "Ruff installed successfully"
+}
+
+# ============================================
+# UV INSTALLATION
+# ============================================
+install_uv() {
+    check_tool_version "uv" "uv" "$UV_VERSION" && return 0
+    
+    # Use official installer script with specific version
+    curl -LsSf "https://astral.sh/uv/${UV_VERSION}/install.sh" | sh
+    
+    log_info "uv installed successfully"
+}
+
+# ============================================
+# LANGUAGE SERVERS INSTALLATION
+# ============================================
+install_language_servers() {
+    log_info "Installing language servers for Helix..."
+    
+    # Install Node.js if not present (needed for many LSPs)
+    if ! command -v node &> /dev/null; then
+        log_info "Installing Node.js..."
+        curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | sudo -E bash -
+        sudo apt-get install -y nodejs
+    fi
+    
+    # Install minimal npm-based tools
+    log_info "Installing npm-based language servers..."
+    # Install with specific versions to ensure consistency
+    sudo npm install -g prettier@${PRETTIER_VERSION}
+    sudo npm install -g pyright@${PYRIGHT_VERSION}
+    sudo npm install -g yaml-language-server@latest
+    
+    # Install taplo (TOML formatter)
+    if ! command -v taplo &> /dev/null; then
+        log_info "Installing taplo..."
+        cd /tmp
+        if [[ "$ARCH" == "x86_64" ]]; then
+            curl -L -o taplo.gz "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-x86_64.gz"
+        else
+            curl -L -o taplo.gz "https://github.com/tamasfe/taplo/releases/download/${TAPLO_VERSION}/taplo-linux-aarch64.gz"
+        fi
+        gunzip taplo.gz
+        sudo mv taplo /usr/local/bin/
+        sudo chmod +x /usr/local/bin/taplo
+    fi
+    
+    # Install rust-analyzer if Rust is installed
+    if command -v cargo &> /dev/null; then
+        log_info "Installing rust-analyzer..."
+        if ! command -v rust-analyzer &> /dev/null; then
+            cd /tmp
+            if [[ "$ARCH" == "x86_64" ]]; then
+                curl -L -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz"
+            else
+                curl -L -o rust-analyzer.gz "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-unknown-linux-gnu.gz"
+            fi
+            gunzip rust-analyzer.gz
+            sudo mv rust-analyzer /usr/local/bin/
+            sudo chmod +x /usr/local/bin/rust-analyzer
+        fi
+    fi
+    
+    log_info "Language servers installed successfully"
+}
+
+# ============================================
+# CLAUDE CODE INSTALLATION
+# ============================================
+install_claude_code() {
+    CLAUDE_LOCAL_DIR="$HOME/.claude/local"
+    
+    if [ -f "$CLAUDE_LOCAL_DIR/claude" ]; then
+        log_info "Claude Code is already installed locally"
+        return
+    fi
+    
+    log_info "Installing Claude Code locally..."
+    
+    # Create local directory
+    mkdir -p "$CLAUDE_LOCAL_DIR"
+    
+    # Install Claude Code CLI locally
+    cd "$CLAUDE_LOCAL_DIR"
+    npm install @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+    
+    # Create symlink to the binary
+    ln -sf "$CLAUDE_LOCAL_DIR/node_modules/.bin/claude" "$CLAUDE_LOCAL_DIR/claude"
+    
+    log_info "Claude Code installed successfully to $CLAUDE_LOCAL_DIR"
+}
+
+# ============================================
+# MAIN
+# ============================================
+main() {
+    log_info "Starting minimal development environment setup..."
+    
+    install_packages
+    install_helix
+    install_ripgrep
+    install_eza
+    install_dust
+    install_zellij
+    install_ruff
+    install_uv
+    install_language_servers
+    install_claude_code
+    
+    log_info "Setup complete! Essential tools installed:"
+    log_info "  - Helix (hx) - Modern text editor"
+    log_info "  - Ripgrep (rg) - Fast code search"
+    log_info "  - Eza - Better ls with colors"
+    log_info "  - Dust - Disk usage analyzer"
+    log_info "  - Zellij - Terminal multiplexer"
+    log_info "  - Ruff - Python linter and formatter"
+    log_info "  - uv - Python package manager"
+    log_info "  - Claude Code - AI coding assistant"
+    log_info "  - Language servers for Python, Rust, YAML, TOML, JSON"
+    log_info ""
+    log_info "Apply your dotfiles with: chezmoi apply"
+}
+
+main "$@"

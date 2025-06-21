@@ -1,0 +1,69 @@
+# Helix Languages Configuration
+
+# JSON
+[[language]]
+name = "json"
+formatter = { command = "prettier", args = ["--parser", "json"] }
+auto-format = true
+
+# Python
+[[language]]
+name = "python"
+language-servers = [ "ruff", "pyright" ]
+roots = ["pyproject.toml", "pyrightconfig.json", "Poetry.lock", "ruff.toml"]
+auto-format = true
+formatter = { command = "ruff", args = ["format", "-"] }
+
+[language-server.pyright]
+command = "pyright-langserver"
+args = ["--stdio"]
+
+[language-server.pyright.config.python.analysis]
+typeCheckingMode = "basic"
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+
+[language-server.ruff.config.settings]
+logLevel = "warning"
+
+# Rust
+[[language]]
+name = "rust"
+auto-format = true
+
+[language-server.rust-analyzer.config.check]
+command = "clippy"
+
+# TOML
+[[language]]
+name = "toml"
+formatter = { command = "taplo", args = ["fmt", "-"] }
+auto-format = true
+
+# YAML
+[[language]]
+name = "yaml"
+language-servers = [ "yaml-language-server" ]
+auto-format = true
+
+[language-server.yaml-language-server.config.yaml]
+format = { enable = true }
+validation = true
+
+[language-server.yaml-language-server.config.yaml.schemas]
+"https://json.schemastore.org/github-workflow.json" = ".github/workflows/*.{yml,yaml}"
+"https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json" = "roles/{tasks,handlers}/*.{yml,yaml}"
+
+# Go
+[[language]]
+name = "go"
+auto-format = true
+formatter = { command = "gofmt" }
+
+# Markdown
+[[language]]
+name = "markdown"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "markdown"] }

@@ -1,0 +1,28 @@
+{
+  "enabledTools": [
+    "Bash",
+    "Read",
+    "Write",
+    "Edit",
+    "MultiEdit",
+    "Glob",
+    "Grep",
+    "LS",
+    "WebSearch",
+    "WebFetch",
+    "Task",
+    "exit_plan_mode",
+    "TodoRead",
+    "TodoWrite",
+    "NotebookRead",
+    "NotebookEdit"
+  ],
+  "customInstructions": "",
+  "alwaysAllowBash": false,
+  "alwaysAllowReads": false,
+  "alwaysAllowWrites": false,
+  "alwaysAllowEdits": false,
+  "alwaysAllowGlob": false,
+  "autoApprove": false,
+  "autoRunBash": false
+}
