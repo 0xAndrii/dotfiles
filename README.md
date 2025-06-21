@@ -8,6 +8,12 @@ Minimal Linux development environment. Chezmoi-managed.
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin init --apply 0xAndrii
 ```
 
+### Update
+
+```bash
+chezmoi update  # Pull latest changes and apply
+```
+
 ### Uninstall
 
 ```bash
@@ -55,6 +61,7 @@ chezmoi diff          # Local changes
 chezmoi apply         # Apply changes
 chezmoi update -n     # Preview updates from git
 chezmoi update        # Pull and apply updates
+chezmoi purge         # Remove managed files
 ```
 
 ## Versions
