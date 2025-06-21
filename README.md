@@ -1,5 +1,9 @@
 # dotfiles
 
+[![Linux](https://img.shields.io/badge/platform-linux-blue?logo=linux&logoColor=white)](https://github.com/0xAndrii/dotfiles)
+[![Managed by Chezmoi](https://img.shields.io/badge/managed%20by-chezmoi-blueviolet)](https://www.chezmoi.io)
+[![Automated Updates](https://github.com/0xAndrii/dotfiles/actions/workflows/update-registry.yml/badge.svg)](https://github.com/0xAndrii/dotfiles/actions)
+
 Minimal Linux development environment. Chezmoi-managed.
 
 ## Install
