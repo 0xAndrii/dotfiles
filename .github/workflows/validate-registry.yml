@@ -57,6 +57,9 @@ jobs:
                   errors=$((errors + 1))
                 fi
                 ;;
+              manual)
+                # Manual type doesn't require repo or package fields
+                ;;
               *)
                 echo "❌ $tool: unknown type '$type'" | tee -a $GITHUB_STEP_SUMMARY
                 errors=$((errors + 1))
