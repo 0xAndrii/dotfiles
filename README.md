@@ -11,20 +11,13 @@ sh -c "$(curl -fsLS chezmoi.io/get)" -- init --apply 0xAndrii
 ## Tools
 
 ```
-# Core
 helix       Text editor with LSP
 zellij      Terminal multiplexer
 ripgrep     Search
-
-# File system
 eza         Better ls
 dust        Disk usage
-
-# Python
 ruff        Python linter/formatter
 uv          Python packages
-
-# AI
 claude      AI assistant
 ```
 
