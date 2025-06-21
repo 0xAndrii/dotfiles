@@ -12,79 +12,83 @@ permissions:
 jobs:
   check-updates:
     uses: ./.github/workflows/check-versions.yml
-  
+
   create-pr:
     needs: check-updates
     if: needs.check-updates.outputs.has_updates == 'true'
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup tools
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
-      
+
       - name: Update registry
         run: |
           # Parse updates from check job
           updates='${{ needs.check-updates.outputs.updates }}'
-          
+
           echo "$updates" | jq -r '.[] | @base64' | while read -r update; do
             _jq() {
               echo "$update" | base64 -d | jq -r "$1"
             }
-            
+
             tool=$(_jq '.tool')
             latest=$(_jq '.latest')
-            
+
             echo "Updating $tool to $latest in registry"
             yq -i ".tools.${tool}.version = \"$latest\"" .chezmoidata.yaml
           done
-      
+
       - name: Generate PR body
         id: pr-body
         run: |
           updates='${{ needs.check-updates.outputs.updates }}'
-          
+
           # Create detailed PR body in temp directory
           cat > /tmp/pr-body.md << 'EOF'
           ## 🔄 Tool Version Updates
-          
+
           This PR updates the tool registry with the latest available versions.
-          
+
           ### Updates
-          
+
           | Tool | Description | Current | Latest |
           |------|-------------|---------|--------|
           EOF
-          
+
           echo "$updates" | jq -r '.[] | "| \(.tool) | \(.description) | \(.current) | **\(.latest)** |"' >> /tmp/pr-body.md
-          
+
           cat >> /tmp/pr-body.md << 'EOF'
-          
+
           ### What happens next?
-          
+
           1. **Review** the version changes
           2. **Merge** this PR to update the registry
           3. Users can then run `chezmoi update` to get the latest versions
-          
+
           ---
           *This PR was automatically created by the update-registry workflow.*
           EOF
-      
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update-tools-${{ github.run_number }}
-          title: "chore(deps): bump tool versions - $(date +'%Y-%m-%d')"
+          branch: update-tools-${{ steps.date.outputs.date }}-${{ github.run_number }}
+          title: "chore(deps): bump tool versions - ${{ steps.date.outputs.date }}"
           body-path: /tmp/pr-body.md
           commit-message: |
             chore(deps): bump tool versions
-            
+
             Updates available tool versions to their latest releases.
             See PR description for detailed changes.
           assignees: ${{ github.actor }}

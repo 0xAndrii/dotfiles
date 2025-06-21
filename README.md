@@ -66,7 +66,7 @@ chezmoi purge         # Remove managed files
 
 ## Versions
 
-Tool versions and metadata are managed in `.chezmoidata.yaml`. 
+Tool versions and metadata are managed in `.chezmoidata.yaml`.
 
 Structure:
 ```yaml

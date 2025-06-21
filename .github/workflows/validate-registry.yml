@@ -12,27 +12,27 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup tools
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
-      
+
       - name: Validate registry structure
         run: |
           echo "## Registry Validation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           errors=0
-          
+
           # Check required fields for each tool
           for tool in $(yq '.tools | keys | .[]' .chezmoidata.yaml); do
             echo "Validating $tool..."
-            
+
             # Required fields
             for field in type version description; do
               value=$(yq ".tools.${tool}.${field}" .chezmoidata.yaml)
@@ -41,7 +41,7 @@ jobs:
                 errors=$((errors + 1))
               fi
             done
-            
+
             # Type-specific fields
             type=$(yq ".tools.${tool}.type" .chezmoidata.yaml)
             case "$type" in
@@ -62,7 +62,7 @@ jobs:
                 errors=$((errors + 1))
                 ;;
             esac
-            
+
             # Validate version pattern if specified
             pattern=$(yq ".tools.${tool}.pattern" .chezmoidata.yaml)
             version=$(yq ".tools.${tool}.version" .chezmoidata.yaml)
@@ -73,7 +73,7 @@ jobs:
               fi
             fi
           done
-          
+
           if [ $errors -eq 0 ]; then
             echo "✅ All validations passed!" | tee -a $GITHUB_STEP_SUMMARY
           else

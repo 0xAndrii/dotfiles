@@ -16,21 +16,21 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    
+
     outputs:
       has_updates: ${{ steps.compare.outputs.has_updates }}
       updates: ${{ steps.compare.outputs.updates }}
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup tools
         run: |
           # Install yq for YAML processing
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
           sudo chmod +x /usr/local/bin/yq
-      
+
       - name: Check versions
         id: compare
         run: |
@@ -38,7 +38,7 @@ jobs:
           normalize_version() {
             echo "${1#v}"
           }
-          
+
           check_github_release() {
             local repo="$1"
             for attempt in 1 2 3; do
@@ -46,42 +46,42 @@ jobs:
                 -H "Accept: application/vnd.github.v3+json" \
                 "https://api.github.com/repos/${repo}/releases/latest" \
                 2>/dev/null | jq -r '.tag_name // empty')
-              
+
               [ -n "$version" ] && echo "$version" && return 0
               [ $attempt -lt 3 ] && sleep 2
             done
             return 1
           }
-          
+
           check_npm_package() {
             local package="$1"
             for attempt in 1 2 3; do
               version=$(curl -sS --fail-with-body \
                 "https://registry.npmjs.org/${package}/latest" \
                 2>/dev/null | jq -r '.version // empty')
-              
+
               [ -n "$version" ] && echo "$version" && return 0
               [ $attempt -lt 3 ] && sleep 2
             done
             return 1
           }
-          
+
           # Initialize
           updates=()
           has_updates=false
           check_failures=0
-          
+
           # Check each tool
           echo "## Checking tool versions" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Tool | Current | Latest | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|------|---------|--------|--------|" >> $GITHUB_STEP_SUMMARY
-          
+
           for tool in $(yq '.tools | keys | .[]' .chezmoidata.yaml); do
             type=$(yq ".tools.${tool}.type" .chezmoidata.yaml)
             current=$(yq ".tools.${tool}.version" .chezmoidata.yaml)
             description=$(yq ".tools.${tool}.description" .chezmoidata.yaml)
-            
+
             # Get latest version
             case "$type" in
               github)
@@ -96,7 +96,7 @@ jobs:
                 latest="error"
                 ;;
             esac
-            
+
             # Compare versions
             if [ "$latest" = "error" ]; then
               status="❌ Check failed"
@@ -108,20 +108,20 @@ jobs:
               updates+=("{\"tool\":\"$tool\",\"current\":\"$current\",\"latest\":\"$latest\",\"description\":\"$description\"}")
               has_updates=true
             fi
-            
+
             echo "| $tool | $current | $latest | $status |" >> $GITHUB_STEP_SUMMARY
           done
-          
+
           # Output results
           echo "has_updates=$has_updates" >> $GITHUB_OUTPUT
-          
+
           if [ "$has_updates" = "true" ]; then
             updates_json=$(printf '%s\n' "${updates[@]}" | jq -s '.')
             # Escape for GitHub Actions
             updates_escaped=$(echo "$updates_json" | jq -c '.')
             echo "updates=$updates_escaped" >> $GITHUB_OUTPUT
           fi
-          
+
           # Fail if there were check failures
           if [ $check_failures -gt 0 ]; then
             echo "" >> $GITHUB_STEP_SUMMARY

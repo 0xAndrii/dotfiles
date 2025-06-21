@@ -24,7 +24,7 @@ MISSING_PACKAGES=$(echo $MISSING_PACKAGES | xargs)
 
 if [ -n "$MISSING_PACKAGES" ]; then
     echo "  → Installing missing packages..."
-    
+
     if [[ "$ID" == "ubuntu" ]] || [[ "$ID" == "debian" ]]; then
         # Replace make/gcc with build-essential for debian-based
         if [[ "$MISSING_PACKAGES" == *"make"* ]] || [[ "$MISSING_PACKAGES" == *"gcc"* ]]; then
