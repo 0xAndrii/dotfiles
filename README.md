@@ -5,7 +5,7 @@
 [![Check Versions](https://github.com/0xAndrii/dotfiles/actions/workflows/check-versions.yml/badge.svg)](https://github.com/0xAndrii/dotfiles/actions/workflows/check-versions.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Minimal Linux development environment. Chezmoi-managed.
+Minimal Linux development environment managed by Chezmoi. Daily automated version checks keep tools current.
 
 ## Install
 
@@ -69,6 +69,16 @@ chezmoi update -n     # Preview updates from git
 chezmoi update        # Pull and apply updates
 chezmoi purge         # Remove managed files
 ```
+
+## Customize
+
+Fork and modify:
+
+1. Edit `.chezmoidata.yaml` - tool versions
+2. Modify `.chezmoiscripts/` - installation logic
+3. Adjust configurations in `dot_*` files
+
+GitHub Actions check for updates daily and create PRs automatically.
 
 ## Documentation
 
