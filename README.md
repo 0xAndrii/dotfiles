@@ -27,17 +27,26 @@ chezmoi purge  # Remove chezmoi config files
 
 ## Tools
 
-```
-helix       Text editor with LSP
-zellij      Terminal multiplexer
-ripgrep     Search
-eza         Better ls
-dust        Disk usage
-rclone      Cloud storage sync
-ruff        Python linter/formatter
-uv          Python packages
-claude      AI assistant
-```
+### Core Development
+- [**helix**](https://github.com/helix-editor/helix) - Text editor with LSP
+- [**zellij**](https://github.com/zellij-org/zellij) - Terminal multiplexer
+- [**ripgrep**](https://github.com/BurntSushi/ripgrep) - Fast code search
+- [**eza**](https://github.com/eza-community/eza) - Better ls
+- [**dust**](https://github.com/bootandy/dust) - Disk usage analyzer
+- [**rclone**](https://github.com/rclone/rclone) - Cloud storage sync
+
+### Python
+- [**ruff**](https://github.com/astral-sh/ruff) - Python linter/formatter
+- [**uv**](https://github.com/astral-sh/uv) - Fast Python package manager
+
+### Language Servers
+- [**taplo**](https://github.com/tamasfe/taplo) - TOML toolkit & LSP
+- [**pyright**](https://github.com/microsoft/pyright) - Python LSP
+- [**prettier**](https://github.com/prettier/prettier) - Code formatter
+- [**yaml-language-server**](https://github.com/redhat-developer/yaml-language-server) - YAML LSP
+
+### AI Tools
+- [**claude**](https://github.com/anthropics/claude-code) - AI coding assistant
 
 ## Configuration
 
