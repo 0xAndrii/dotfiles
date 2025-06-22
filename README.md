@@ -46,7 +46,7 @@ chezmoi purge  # Remove chezmoi config files
 - [**yaml-language-server**](https://github.com/redhat-developer/yaml-language-server) - YAML LSP
 
 ### AI Tools
-- [**claude**](https://github.com/anthropics/claude-code) - AI coding assistant
+- [**claude code**](https://github.com/anthropics/claude-code) - AI coding assistant
 
 ## Configuration
 
@@ -64,7 +64,7 @@ chezmoi purge  # Remove chezmoi config files
 hx          # Edit
 rg          # Search
 zj          # Terminal session
-claude      # AI assistance
+claude-code # AI assistance
 
 # Python
 ruff check
