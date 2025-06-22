@@ -73,6 +73,7 @@ chezmoi purge         # Remove managed files
 
 - [Tool Management](docs/tool-management.md) - Add or remove tools
 - [GitHub Workflows](docs/github-workflows.md) - Automated version updates
+- [Versioning](docs/versioning.md) - Release process
 
 ---
 
