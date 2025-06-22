@@ -1,6 +1,8 @@
 # Chezmoi ignore file
 README.md
 LICENSE
+VERSION
+scripts/
 .git
 .gitignore
 
