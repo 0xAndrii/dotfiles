@@ -11,10 +11,10 @@ alias zj='zellij'
 alias claude="$HOME/.claude/local/claude"
 
 # Eza aliases (minimal)
-alias ls='eza --group-directories-first'
-alias ll='eza -laag@ --group-directories-first'
-alias lt='eza -lg --git -T --hyperlink --header --level=2'
-alias la='eza -lag@ --sort=modified --reverse --time-style=relative'
+alias ls='eza --group-directories-first --time-style=long-iso'
+alias ll='eza --long --all --all --group --extended --group-directories-first --time-style=long-iso'
+alias lt='eza --long --group --git --tree --hyperlink --header --level=2 --time-style=long-iso'
+alias la='eza --long --all --group --extended --sort=modified --reverse --time-style=relative'
 
 # fnm (Node.js)
 if [ -d "$HOME/.local/share/fnm" ]; then
