@@ -12,6 +12,7 @@ EZA_VERSION="{{ .tools.eza.version }}"
 DUST_VERSION="{{ .tools.dust.version }}"
 ZELLIJ_VERSION="{{ .tools.zellij.version }}"
 TAPLO_VERSION="{{ .tools.taplo.version }}"
+RCLONE_VERSION="{{ .tools.rclone.version }}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -126,4 +127,22 @@ if ! command -v taplo &> /dev/null; then
     echo -e "  ${GREEN}✓${NC} Taplo installed"
 else
     echo -e "  ${GREEN}✓${NC} Taplo already installed"
+fi
+
+# Rclone
+if ! command -v rclone &> /dev/null || [[ $(rclone --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1) != "${RCLONE_VERSION#v}" ]]; then
+    echo "  → Installing Rclone ${RCLONE_VERSION}..."
+    cd /tmp
+    if [[ "$ARCH" == "x86_64" ]]; then
+        curl -sL -o rclone.zip "https://downloads.rclone.org/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-amd64.zip"
+    else
+        curl -sL -o rclone.zip "https://downloads.rclone.org/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-arm64.zip"
+    fi
+    unzip -q rclone.zip
+    mv rclone-*/rclone $HOME/.local/bin/
+    chmod +x $HOME/.local/bin/rclone
+    rm -rf rclone.zip rclone-*
+    echo -e "  ${GREEN}✓${NC} Rclone installed"
+else
+    echo -e "  ${GREEN}✓${NC} Rclone already up to date"
 fi

@@ -33,6 +33,7 @@ zellij      Terminal multiplexer
 ripgrep     Search
 eza         Better ls
 dust        Disk usage
+rclone      Cloud storage sync
 ruff        Python linter/formatter
 uv          Python packages
 claude      AI assistant
