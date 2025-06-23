@@ -69,7 +69,7 @@ tools:
     description: "Code formatter"
     type: npm
     package: prettier
-    version: "3.5.3"
+    version: "3.6.0"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   yaml_language_server:
     description: "YAML language server"
