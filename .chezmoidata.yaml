@@ -19,13 +19,13 @@ tools:
     description: "Modern ls replacement"
     type: github
     repo: eza-community/eza
-    version: "v0.21.6"
+    version: "v0.22.0"
     pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
   dust:
     description: "Disk usage analyzer"
     type: github
     repo: bootandy/dust
-    version: "v1.2.1"
+    version: "v1.2.2"
     pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
   zellij:
     description: "Terminal multiplexer"
@@ -50,7 +50,7 @@ tools:
     description: "Python linter and formatter"
     type: github
     repo: astral-sh/ruff
-    version: "0.12.1"
+    version: "0.12.2"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   uv:
     description: "Python package manager"
@@ -82,5 +82,5 @@ tools:
     description: "AI coding assistant"
     type: npm
     package: "@anthropic-ai/claude-code"
-    version: "1.0.41"
+    version: "1.0.43"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
