@@ -31,7 +31,7 @@ tools:
     description: "Terminal multiplexer"
     type: github
     repo: zellij-org/zellij
-    version: "v0.42.2"
+    version: "v0.43.1"
     pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
   taplo:
     description: "TOML toolkit"
@@ -50,13 +50,13 @@ tools:
     description: "Python linter and formatter"
     type: github
     repo: astral-sh/ruff
-    version: "0.12.7"
+    version: "0.12.8"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   uv:
     description: "Python package manager"
     type: github
     repo: astral-sh/uv
-    version: "0.8.4"
+    version: "0.8.8"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   # Language servers
   pyright:
@@ -82,5 +82,5 @@ tools:
     description: "AI coding assistant"
     type: npm
     package: "@anthropic-ai/claude-code"
-    version: "1.0.67"
+    version: "1.0.72"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
