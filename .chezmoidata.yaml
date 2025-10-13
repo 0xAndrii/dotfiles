@@ -50,13 +50,13 @@ tools:
     description: "Python linter and formatter"
     type: github
     repo: astral-sh/ruff
-    version: "0.13.3"
+    version: "0.14.0"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   uv:
     description: "Python package manager"
     type: github
     repo: astral-sh/uv
-    version: "0.8.23"
+    version: "0.9.2"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   # Language servers
   pyright:
@@ -75,12 +75,12 @@ tools:
     description: "YAML language server"
     type: npm
     package: yaml-language-server
-    version: "1.19.1"
+    version: "1.19.2"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   # AI tools
   claude_code:
     description: "AI coding assistant"
     type: npm
     package: "@anthropic-ai/claude-code"
-    version: "2.0.8"
+    version: "2.0.14"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
