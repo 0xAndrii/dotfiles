@@ -64,7 +64,7 @@ chezmoi purge  # Remove chezmoi config files
 hx          # Edit
 rg          # Search
 zj          # Terminal session
-claude-code # AI assistance
+claude      # AI assistance
 
 # Python
 ruff check
