@@ -31,8 +31,9 @@ if ! command -v hx &> /dev/null || [[ $(hx --version 2>/dev/null | grep -oE '[0-
     tar xf helix.tar.xz
     mv "helix-${HELIX_VERSION}-${ARCH}-linux/hx" $HOME/.local/bin/
     chmod +x $HOME/.local/bin/hx
-    mkdir -p $HOME/.local/share/helix
-    cp -r "helix-${HELIX_VERSION}-${ARCH}-linux/runtime" $HOME/.local/share/helix/
+    # Install runtime in the directory where helix expects it
+    rm -rf $HOME/.local/bin/runtime
+    cp -r "helix-${HELIX_VERSION}-${ARCH}-linux/runtime" $HOME/.local/bin/
     rm -rf helix.tar.xz "helix-${HELIX_VERSION}-${ARCH}-linux"
     echo -e "  ${GREEN}✓${NC} Helix installed"
 else
