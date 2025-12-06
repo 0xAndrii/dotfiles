@@ -1,116 +1,114 @@
 {
-  // Extensions
-  "extensions.recommendations": [
-    "charliermarsh.ruff",
-    "ms-toolsai.jupyter",
-    "ms-python.python",
-    "vscodevim.vim"
-  ],
-
-  // Python formatting
-  "[python]": {
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.codeActionsOnSave": {
+    // Extensions
+    "extensions.recommendations": [
+      "charliermarsh.ruff",
+      "ms-toolsai.jupyter",
+      "ms-python.python",
+      "vscodevim.vim"
+    ],
+    
+    // Python formatting
+    "[python]": {
+      "editor.formatOnSave": true,
+      "editor.formatOnPaste": true,
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+      }
+    },
+    
+    // Jupyter formatting
+    "[jupyter]": {
+      "editor.formatOnSave": true,
+      "editor.formatOnPaste": true,
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+      }
+    },
+    
+    "notebook.formatOnSave.enabled": true,
+    "notebook.codeActionsOnSave": {
       "source.organizeImports": "explicit"
+    },
+    
+    // Ruff settings
+    "ruff.lint.enable": true,
+    "ruff.format.enable": true,
+    "ruff.organizeImports": true,
+    "ruff.fixAll": false,
+    "ruff.importStrategy": "fromEnvironment",
+    
+    "python.analysis.autoImportCompletions": true,
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.analysis.autoSearchPaths": true,
+    
+    // Auto-save settings
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    
+    // Editor settings
+    "editor.lineNumbers": "relative",
+    
+    // Vim settings
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+  
+    
+    // Hide from file explorer
+    "files.exclude": {
+      "**/.ipynb_checkpoints": true,
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/node_modules": true,
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/.venv": true,
+      "**/.ruff_cache": true
+    },
+    
+    // Exclude from search
+    "search.exclude": {
+      "**/.ipynb_checkpoints": true,
+      "**/saved_models": true,
+      "**/catboost_info": true,
+      "**/wandb": true,
+      "**/wandb_logs": true,
+      "**/wandb-metadata.json": true,
+      "**/wandb-summary.json": true,
+      "**/*.wandb": true,
+      "**/*.feather": true,
+      "**/*.parquet": true,
+      "**/data": true,
+      "**/node_modules": true,
+      "**/__pycache__": true,
+      "**/*.pyc": true,
+      "**/.venv": true,
+      "**/.ruff_cache": true,
+      "**/logs": true,
+      "**/*.log": true
+    },
+    
+    // Exclude from file watcher
+    "files.watcherExclude": {
+      "**/.ipynb_checkpoints/**": true,
+      "**/saved_models/**": true,
+      "**/catboost_info/**": true,
+      "**/wandb/**": true,
+      "**/wandb_logs/**": true,
+      "**/wandb-metadata.json": true,
+      "**/wandb-summary.json": true,
+      "**/*.wandb": true,
+      "**/*.feather": true,
+      "**/*.parquet": true,
+      "**/data/**": true,
+      "**/node_modules/**": true,
+      "**/__pycache__/**": true,
+      "**/.venv/**": true,
+      "**/.ruff_cache/**": true,
+      "**/logs/**": true,
+      "**/*.log": true
     }
-  },
-
-  // Jupyter formatting
-  "[jupyter]": {
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
-  },
-
-  "notebook.formatOnSave.enabled": true,
-  "notebook.codeActionsOnSave": {
-    "source.organizeImports": "explicit"
-  },
-
-  // Ruff settings
-  "ruff.lint.enable": true,
-  "ruff.format.enable": true,
-  "ruff.organizeImports": true,
-  "ruff.fixAll": false,
-  "ruff.lint.run": "onType",
-  "ruff.importStrategy": "fromEnvironment",
-  "ruff.showNotifications": "onWarning",
-
-  "python.analysis.autoImportCompletions": true,
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-  "python.terminal.activateEnvironment": true,
-  "python.analysis.autoSearchPaths": true,
-
-  // Auto-save settings
-  "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 1000,
-
-  // Editor settings
-  "editor.lineNumbers": "relative",
-
-  // Vim settings
-  "vim.useSystemClipboard": true,
-  "vim.useCtrlKeys": true,
-  "vim.hlsearch": true,
-
-
-  // Hide from file explorer
-  "files.exclude": {
-    "**/.ipynb_checkpoints": true,
-    "**/.git": true,
-    "**/.DS_Store": true,
-    "**/node_modules": true,
-    "**/__pycache__": true,
-    "**/*.pyc": true,
-    "**/.venv": true,
-    "**/.ruff_cache": true
-  },
-
-  // Exclude from search
-  "search.exclude": {
-    "**/.ipynb_checkpoints": true,
-    "**/saved_models": true,
-    "**/catboost_info": true,
-    "**/wandb": true,
-    "**/wandb_logs": true,
-    "**/wandb-metadata.json": true,
-    "**/wandb-summary.json": true,
-    "**/*.wandb": true,
-    "**/*.feather": true,
-    "**/*.parquet": true,
-    "**/data": true,
-    "**/node_modules": true,
-    "**/__pycache__": true,
-    "**/*.pyc": true,
-    "**/.venv": true,
-    "**/.ruff_cache": true,
-    "**/logs": true,
-    "**/*.log": true
-  },
-
-  // Exclude from file watcher
-  "files.watcherExclude": {
-    "**/.ipynb_checkpoints/**": true,
-    "**/saved_models/**": true,
-    "**/catboost_info/**": true,
-    "**/wandb/**": true,
-    "**/wandb_logs/**": true,
-    "**/wandb-metadata.json": true,
-    "**/wandb-summary.json": true,
-    "**/*.wandb": true,
-    "**/*.feather": true,
-    "**/*.parquet": true,
-    "**/data/**": true,
-    "**/node_modules/**": true,
-    "**/__pycache__/**": true,
-    "**/.venv/**": true,
-    "**/.ruff_cache/**": true,
-    "**/logs/**": true,
-    "**/*.log": true
   }
-}
