@@ -1,21 +1,33 @@
 {
   "permissions": {
     "allow": [
-      "git worktree",
-      "Bash(find:*)",
-      "Bash(grep:*)",
       "Bash(docker logs:*)",
-      "Bash(rg:*)",
-      "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs",
-      "Bash(ls:*)",
-      "Bash(ruff check:*)",
-      "Bash(ruff format:*)",
-      "Bash(git fetch:*)",
+      "Bash(find:*)",
+      "Bash(gh pr list:*)",
       "Bash(gh pr view:*)",
+      "Bash(git:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(mypy:*)",
+      "Bash(pytest:*)",
+      "Bash(python:*)",
+      "Bash(rg:*)",
+      "Bash(ruff:*)",
+      "Edit(src/**/*.py)",
+      "Edit(tests/**/*.py)",
+      "Read(*.md)",
+      "Read(*.py)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Bash(gh pr list:*)"
+      "Write(src/**/*.py)",
+      "Write(tests/**/*.py)",
+      "git worktree",
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)"
     ]
   },
   "model": "opus"
