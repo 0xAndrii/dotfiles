@@ -4,7 +4,8 @@
       "charliermarsh.ruff",
       "ms-toolsai.jupyter",
       "ms-python.python",
-      "vscodevim.vim"
+      "vscodevim.vim",
+      "teabyii.ayu"
     ],
     
     // Python formatting
@@ -55,8 +56,10 @@
     "vim.useSystemClipboard": true,
     "vim.useCtrlKeys": true,
     "vim.hlsearch": true,
-  
-    
+
+    // Theme
+    "workbench.colorTheme": "Ayu Mirage Bordered",
+
     // Hide from file explorer
     "files.exclude": {
       "**/.ipynb_checkpoints": true,
@@ -73,7 +76,17 @@
       "**/.docker": true,
       "**/.cursor": true,
       "**/.cursor-server": true,
-      "**/.cache": true
+      "**/.cache": true,
+      "**/.bash_history": true,
+      "**/.bash_logout": true,
+      "**/.bashrc": true,
+      "**/.claude.json": true,
+      "**/.claude.json.backup": true,
+      "**/.gitconfig": true,
+      "**/.lesshst": true,
+      "**/.profile": true,
+      "**/.sudo_as_admin_successful": true,
+      "**/.zshrc": true
     },
     
     // Exclude from search (inherits files.exclude, so only add extras)
