@@ -66,7 +66,14 @@
       "**/__pycache__": true,
       "**/*.pyc": true,
       "**/.venv": true,
-      "**/.ruff_cache": true
+      "**/.ruff_cache": true,
+      "**/.ssh": true,
+      "**/.npm": true,
+      "**/.local": true,
+      "**/.docker": true,
+      "**/.cursor": true,
+      "**/.cursor-server": true,
+      "**/.cache": true
     },
     
     // Exclude from search (inherits files.exclude, so only add extras)
