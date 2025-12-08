@@ -50,13 +50,13 @@ tools:
     description: "Python linter and formatter"
     type: github
     repo: astral-sh/ruff
-    version: "0.14.7"
+    version: "0.14.8"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   uv:
     description: "Python package manager"
     type: github
     repo: astral-sh/uv
-    version: "0.9.13"
+    version: "0.9.16"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   # Language servers
   pyright:
@@ -69,7 +69,7 @@ tools:
     description: "Code formatter"
     type: npm
     package: prettier
-    version: "3.7.3"
+    version: "3.7.4"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   yaml_language_server:
     description: "YAML language server"
