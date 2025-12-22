@@ -43,20 +43,20 @@ tools:
     description: "rsync for cloud storage"
     type: github
     repo: rclone/rclone
-    version: "v1.72.0"
+    version: "v1.72.1"
     pattern: "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
   # Python tools
   ruff:
     description: "Python linter and formatter"
     type: github
     repo: astral-sh/ruff
-    version: "0.14.7"
+    version: "0.14.10"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   uv:
     description: "Python package manager"
     type: github
     repo: astral-sh/uv
-    version: "0.9.13"
+    version: "0.9.18"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   # Language servers
   pyright:
@@ -69,7 +69,7 @@ tools:
     description: "Code formatter"
     type: npm
     package: prettier
-    version: "3.7.3"
+    version: "3.7.4"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
   yaml_language_server:
     description: "YAML language server"
