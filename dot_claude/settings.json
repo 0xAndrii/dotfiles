@@ -21,7 +21,7 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Write(src/**/*.py)",
       "Write(tests/**/*.py)",
-      "git worktree",
+      "Git worktree",
       "mcp__context7__get-library-docs",
       "mcp__context7__resolve-library-id"
     ],
